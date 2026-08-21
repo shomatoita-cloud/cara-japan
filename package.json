@@ -7,7 +7,8 @@
     "dev": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "gen:ogp": "node scripts/gen-ogp.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.6",
@@ -16,6 +17,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "sharp": "^0.35.3",
     "typescript": "^6.0.3"
   }
 }

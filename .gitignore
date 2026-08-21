@@ -26,3 +26,6 @@ Thumbs.db
 
 # Claude Code のローカル設定(端末固有のパスを含むため共有しない)
 .claude/settings.local.json
+
+# OGP生成の中間物(scripts/gen-ogp.mjs で再生成可能)
+scripts/ogp.svg
