@@ -1,0 +1,44 @@
+---
+/**
+ * 資料DLのサンクスページ — whitepapers コレクションから自動生成。
+ * スラッグは資料と同じ(例 /thanks/hidden-costs/)。
+ * HubSpotフォームの送信後リダイレクト先にこのURLを設定する。
+ *
+ * ダウンロードは frontmatter の fileUrl。
+ * メール送付は HubSpot ワークフロー側の担当で、コードは関与しない。
+ */
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+import Thanks from '../../layouts/Thanks.astro';
+
+export const getStaticPaths = (async () => {
+  const all = await getCollection('whitepapers');
+  return all.map((d) => ({ params: { slug: d.id }, props: { doc: d } }));
+}) satisfies GetStaticPaths;
+
+const { doc } = Astro.props;
+const d = doc.data;
+---
+
+<Thanks
+  title={`ダウンロードありがとうございます | ${d.title} | CARA Platform 日本版`}
+  heading="送信ありがとうございました"
+  lead="下のボタンから資料をダウンロードいただけます。"
+>
+  <div class="thanks-card">
+    <div class="dl-title">{d.title}</div>
+    <p class="dl-note">
+      {d.pages ? `PDF(${d.pages})` : 'PDF'}{d.readTime ? ` / ${d.readTime}` : ''}
+    </p>
+    <a class="btn btn-coral btn-lg" href={d.fileUrl} target="_blank" rel="noopener">
+      <svg class="ico"><use href="#i-dl" /></svg>資料をダウンロード
+    </a>
+    <div class="mail-note">
+      <svg class="ico"><use href="#i-mail" /></svg>
+      <span>
+        ダウンロードURLはご入力いただいたメールアドレス宛にもお送りしています。
+        届かない場合は迷惑メールフォルダをご確認ください。
+      </span>
+    </div>
+  </div>
+</Thanks>

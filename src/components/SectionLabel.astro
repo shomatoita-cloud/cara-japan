@@ -1,0 +1,21 @@
+---
+/**
+ * SectionLabel.astro — 白ピル+青文字の英字ラベル(モックの .trail)。
+ * 見た目は global.css の .trail が持つ。
+ * 青グラデ背景のセクション上では親側のCSS(例 .reasons .trail)が上書きする。
+ */
+
+interface Props {
+  /** IconSprite のシンボルID(例: 'i-alert') */
+  icon: string;
+  /** スクロール出現アニメーションを付けるか */
+  reveal?: boolean;
+  class?: string;
+}
+
+const { icon, reveal = true, class: className } = Astro.props;
+---
+
+<span class:list={['trail', { reveal }, className]}>
+  <svg class="ico"><use href={`#${icon}`} /></svg><slot />
+</span>

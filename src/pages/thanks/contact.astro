@@ -1,0 +1,27 @@
+---
+/**
+ * 汎用サンクス — 問い合わせ / デモ・個別相談の申込後。
+ * HubSpotの問い合わせフォームのリダイレクト先に設定する。
+ */
+import Thanks from '../../layouts/Thanks.astro';
+---
+
+<Thanks
+  title="お問い合わせありがとうございます | CARA Platform 日本版"
+  heading="送信ありがとうございました"
+  lead="お問い合わせを受け付けました。担当者より2営業日以内にご連絡いたします。"
+>
+  <div class="thanks-card">
+    <div class="dl-title">受付が完了しました</div>
+    <p class="dl-note">
+      内容を確認のうえ、ご入力いただいたメールアドレス宛にご連絡いたします。
+    </p>
+    <div class="mail-note">
+      <svg class="ico"><use href="#i-mail" /></svg>
+      <span>
+        受付確認の自動返信メールをお送りしています。届かない場合は迷惑メールフォルダをご確認いただくか、
+        お手数ですが再度お問い合わせください。
+      </span>
+    </div>
+  </div>
+</Thanks>

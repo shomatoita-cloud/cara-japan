@@ -1,0 +1,273 @@
+---
+/**
+ * ウェビナー詳細 — mocks/CARA_webinar_detail_mock.html を正として移植。
+ * src/content/webinars/*.mdx から自動生成される(MDXを足すだけでページが増える)。
+ * スラッグ = MDXのファイル名(例 20260929-manufacturing-ai)。
+ *
+ * ※ 残席数の表示は実装しない(CLAUDE.md 決定事項)。
+ *    モックCSSの .cap / .cap-bar(残席メーター)は webinar.css に移植していない。
+ */
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import HubspotForm from '../../components/HubspotForm.astro';
+import { WEBINAR, STATS } from '../../consts';
+import { formatDate, isPast, googleCalendarUrl } from '../../lib/webinars';
+import '../../styles/webinar.css';
+
+export const getStaticPaths = (async () => {
+  const all = await getCollection('webinars');
+  return all.map((w) => ({ params: { slug: w.id }, props: { webinar: w } }));
+}) satisfies GetStaticPaths;
+
+const { webinar } = Astro.props;
+const d = webinar.data;
+const date = formatDate(d.date);
+const { Content } = await render(webinar);
+
+const past = isPast(d.date);
+const isArchive = d.status === 'archive';
+// 受付中 = 開催予定 かつ 開催日が未来
+const isOpen = d.status === 'upcoming' && !past;
+
+const calUrl = isOpen ? googleCalendarUrl(webinar, new URL(Astro.url.pathname, Astro.site)) : null;
+
+const stats = STATS.slice(0, 2);
+---
+
+<Base
+  title={`${d.title} | ウェビナー詳細 | CARA Platform 日本版`}
+  description={d.description}
+  bodyClass="webinar-detail"
+  navCurrent="/webinars"
+  stickyCta={{
+    href: '#apply-form',
+    label: isArchive ? '視聴を申し込む' : '無料で申し込む',
+    info: isArchive ? 'アーカイブ配信\n視聴無料' : `${date.short} ${d.timeLabel.split(/[–—~〜-]/)[0]}\n参加無料`,
+    icon: 'i-cal',
+  }}
+>
+  <Breadcrumbs
+    items={[
+      { label: 'TOP', href: '/' },
+      { label: 'ウェビナー・イベント', href: '/webinars' },
+      { label: d.title },
+    ]}
+  />
+
+  {/* イベントヒーロー */}
+  <section class="ev-hero">
+    <div class="wrap inner">
+      <div class="status-row">
+        {isOpen && <span class="status open">受付中・先着順</span>}
+        {isArchive && <span class="status free">アーカイブ配信中</span>}
+        {!isOpen && !isArchive && <span class="status free">受付終了</span>}
+        <span class="status free">参加無料</span>
+        <span class="status free">オンライン開催</span>
+      </div>
+      <h1>{d.title}</h1>
+      <div class="datetime">
+        <svg class="ico"><use href="#i-cal" /></svg>
+        <span>{date.full} <b>{d.timeLabel}</b></span>
+      </div>
+      <div class="tag-row">
+        {d.tags.map((t) => <span># {t}</span>)}
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap layout">
+    <div class="main-col">
+      {/* 概要 */}
+      <div class="block reveal">
+        <h2><span class="b-ico"><svg class="ico"><use href="#i-info" /></svg></span>概要</h2>
+        <p>{d.description}</p>
+        {/* MDX本文 = 概要の続き */}
+        <Content />
+      </div>
+
+      {/* こんな方におすすめ(recommendedFor 未指定なら描画しない) */}
+      {
+        d.recommendedFor && d.recommendedFor.length > 0 && (
+          <div class="block reveal">
+            <h2><span class="b-ico"><svg class="ico"><use href="#i-target" /></svg></span>こんな方におすすめ</h2>
+            <ul class="rec-list">
+              {d.recommendedFor.map((r) => (
+                <li><svg class="ico"><use href="#i-check" /></svg><span>{r}</span></li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+
+      {/* 当日お伝えする軸(agenda) */}
+      <div class="block reveal">
+        <h2>
+          <span class="b-ico"><svg class="ico"><use href="#i-doc" /></svg></span>
+          当日お伝えする{d.agenda.length}つの軸
+        </h2>
+        <div class="axis">
+          {
+            d.agenda.map((a, i) => (
+              /* モックは2番目(実演デモ)を強調表示していたので、同じく2番目を hl にする */
+              <div class:list={['axis-item', { hl: i === 1 }]}>
+                <span class="a-no">{String(i + 1).padStart(2, '0')}</span>
+                <div>
+                  <h3>{a.title}</h3>
+                  <p>{a.body}</p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* 開催概要 */}
+      <div class="block reveal">
+        <h2><span class="b-ico"><svg class="ico"><use href="#i-cal" /></svg></span>開催概要</h2>
+        <table class="spec">
+          <tbody>
+            <tr><th>開催日時</th><td>{date.full} {d.timeLabel}</td></tr>
+            <tr><th>形式</th><td>{d.format} ※申込者には開催前日までに視聴URLをご案内</td></tr>
+            <tr><th>定員</th><td>{d.capacity}</td></tr>
+            <tr><th>参加費</th><td>{WEBINAR.fee}</td></tr>
+            <tr><th>主催</th><td>{WEBINAR.organizer}</td></tr>
+            <tr><th>推奨環境</th><td>{WEBINAR.environment}</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* 当日のご案内 */}
+      <div class="block reveal">
+        <h2><span class="b-ico"><svg class="ico"><use href="#i-monitor" /></svg></span>当日のご案内</h2>
+        <div class="day-notes">
+          {
+            WEBINAR.dayNotes.map((n) => (
+              <span><svg class="ico"><use href={`#${n.icon}`} /></svg>{n.text}</span>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* 参加特典 */}
+      <div class="block reveal">
+        <h2><span class="b-ico"><svg class="ico"><use href="#i-gift" /></svg></span>参加特典</h2>
+        <div class="perk-box">
+          <svg class="ico"><use href="#i-gift" /></svg>
+          <p>{WEBINAR.perkLead}</p>
+        </div>
+      </div>
+
+      {/* 登壇者 */}
+      <div class="block reveal">
+        <h2><span class="b-ico"><svg class="ico"><use href="#i-mic" /></svg></span>登壇者</h2>
+        <div class="speaker">
+          <div class="sp-avatar" aria-hidden="true">
+            <svg viewBox="0 0 96 96" fill="none">
+              <rect width="96" height="96" fill="#F0F6FD" />
+              <circle cx="48" cy="38" r="17" fill="#F4C9A3" />
+              <path d="M31 35c2-13 12-18 18-17 9 1 15 8 15 17v4c-1-6-4-9-9-9H39c-4 0-7 2-8 5z" fill="#1F3350" />
+              <path d="M20 96c3-22 15-32 28-32s25 10 28 32z" fill="#2E6BD6" />
+              <path d="M43 66h10l-2 12h-6z" fill="#fff" />
+            </svg>
+          </div>
+          <div>
+            <div class="name">{d.speaker.name}</div>
+            <div class="role">{d.speaker.role}</div>
+            <p>{d.speaker.bio}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* CARAとは(ミニ) */}
+      <div class="block about-mini reveal">
+        <h2><span class="b-ico"><svg class="ico"><use href="#i-spark" /></svg></span>CARAとは</h2>
+        <p>
+          CARAは、規制業界に特化した次世代プラットフォームです。製薬・製造・金融といった高度なコンプライアンスが求められる業界において、文書管理・品質管理・監査対応を効率化し、AIを活用して業務全体を最適化します。
+        </p>
+        <div class="mini-stats">
+          {
+            stats.map((s) => (
+              <div class="ms">
+                <b>{s.value.toLocaleString()}{s.suffix}</b>
+                <span>{s.label}</span>
+              </div>
+            ))
+          }
+        </div>
+        <a class="btn" href="/#about"><svg class="ico"><use href="#i-doc" /></svg>CARAについて詳しく見る</a>
+      </div>
+
+      {/* 申込フォーム(HubSpot) */}
+      <div class="block apply-form-block reveal" id="apply-form">
+        <h2>
+          <span class="b-ico"><svg class="ico"><use href="#i-cal" /></svg></span>
+          {isArchive ? 'アーカイブ視聴のお申し込み' : 'お申し込み'}
+        </h2>
+        {
+          isArchive && d.archiveVideoUrl ? (
+            <Fragment>
+              <p>フォーム送信後、こちらの録画をご視聴いただけます。</p>
+              <div class="archive-video">
+                <iframe src={d.archiveVideoUrl} title={`${d.title} アーカイブ動画`} allowfullscreen loading="lazy" />
+              </div>
+            </Fragment>
+          ) : (
+            <p>下記フォームよりお申し込みください。折り返し、視聴URLをご案内します。</p>
+          )
+        }
+        {/* hubspotFormId はMDXのfrontmatterから。未設定のあいだはプレースホルダー表示 */}
+        <HubspotForm formId={d.hubspotFormId} />
+      </div>
+
+      {/* 注意事項 */}
+      <div class="block reveal">
+        <h2><span class="b-ico"><svg class="ico"><use href="#i-info" /></svg></span>注意事項</h2>
+        <ul class="notes-list">
+          {WEBINAR.notes.map((n) => <li>{n}</li>)}
+        </ul>
+      </div>
+    </div>
+
+    {/* サイド申込カード ※残席メーターは実装しない(CLAUDE.md 決定事項) */}
+    <aside class="apply-card reveal" id="apply">
+      <div class="apply-rows">
+        <div class="apply-row">
+          <svg class="ico"><use href="#i-cal" /></svg>
+          <div><b>{date.slash} ({date.weekday}) {d.timeLabel}</b><small>開始5分前から入室可</small></div>
+        </div>
+        <div class="apply-row">
+          <svg class="ico"><use href="#i-monitor" /></svg>
+          <div><b>{d.format}</b><small>前日までに視聴URLをご案内</small></div>
+        </div>
+        <div class="apply-row">
+          <svg class="ico"><use href="#i-users" /></svg>
+          <div><b>{d.capacity}・参加無料</b><small>事前登録制</small></div>
+        </div>
+      </div>
+      <a class="btn btn-coral btn-lg" href="#apply-form">
+        <svg class="ico"><use href="#i-cal" /></svg>{isArchive ? '視聴を申し込む' : '無料で申し込む'}
+      </a>
+      {
+        calUrl && (
+          <a class="cal-link" href={calUrl} target="_blank" rel="noopener">
+            <svg class="ico"><use href="#i-cal" /></svg>Googleカレンダーに追加
+          </a>
+        )
+      }
+      {isOpen && <div class="deadline">{WEBINAR.deadline}</div>}
+    </aside>
+  </div>
+
+  {/* 下部CTA */}
+  <section class="bottom-cta">
+    <div class="wrap">
+      <h2 class="reveal">"自社で使ったらどうなるか"を、<br />1時間で体感してください。</h2>
+      <p class="reveal">参加無料・カメラOFF可・途中入退場自由。お気軽にご参加ください。</p>
+      <a class="btn btn-coral btn-lg reveal" href="#apply-form">
+        <svg class="ico"><use href="#i-cal" /></svg>このウェビナーに申し込む
+      </a>
+    </div>
+  </section>
+</Base>

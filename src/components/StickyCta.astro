@@ -1,0 +1,56 @@
+---
+/**
+ * StickyCta.astro — モバイル(〜760px)下部の固定CTAバー。
+ * mocks/CARA_TOP_design_mock.html の .sticky-cta を移植。
+ * info を渡すと、詳細ページ用(mocks/CARA_webinar_detail_mock.html)の
+ * 「日時・参加費 + ボタン」の2カラム版になる。
+ * footer の padding-bottom がこのバーの分の余白を確保している。
+ */
+
+interface Props {
+  href?: string;
+  label?: string;
+  /** 左側に出す補足(改行は \n)。指定時は2カラム表示になる */
+  info?: string;
+  /** ボタンのアイコン(IconSprite のシンボルID) */
+  icon?: string;
+}
+
+const { href = '/#contact', label = '資料を無料ダウンロード', info, icon = 'i-dl' } = Astro.props;
+const infoLines = info ? info.split('\n') : [];
+---
+
+<div class:list={['sticky-cta', { 'has-info': Boolean(info) }]}>
+  {
+    info && (
+      <div class="info">
+        {infoLines.map((line, i) => (
+          <Fragment>
+            {i > 0 && <br />}
+            {line}
+          </Fragment>
+        ))}
+      </div>
+    )
+  }
+  <a class="btn btn-coral" href={href}>
+    <svg class="ico"><use href={`#${icon}`} /></svg>{label}
+  </a>
+</div>
+
+<style>
+  .sticky-cta{
+    position:fixed;left:0;right:0;bottom:0;z-index:80;display:none;
+    background:rgba(255,255,255,.95);backdrop-filter:blur(10px);
+    padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+    border-top:1px solid var(--line);box-shadow:0 -8px 24px rgba(31,51,80,.08);
+  }
+  .sticky-cta .btn{width:100%;justify-content:center;padding:15px}
+  @media(max-width:760px){.sticky-cta{display:block}}
+
+  /* 詳細ページ用: 補足テキスト + ボタン */
+  .sticky-cta.has-info{padding:10px 16px calc(10px + env(safe-area-inset-bottom));align-items:center;gap:12px}
+  .sticky-cta.has-info .info{font-size:11px;font-weight:700;color:var(--ink-soft);line-height:1.5;flex:none}
+  .sticky-cta.has-info .btn{flex:1;width:auto;padding:14px}
+  @media(max-width:760px){.sticky-cta.has-info{display:flex}}
+</style>

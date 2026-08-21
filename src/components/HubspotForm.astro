@@ -1,0 +1,83 @@
+---
+/**
+ * HubspotForm.astro — HubSpotフォームの唯一の埋め込み口。
+ * 自前のフォーム(<form>/送信処理)は実装しない。
+ *
+ * portalId / formId が未設定のあいだは、モック(.form-mock)の
+ * プレースホルダーを表示する。設定されると埋め込みに切り替わる。
+ * 送信後の遷移先(/thanks/[slug])は HubSpot 側の設定で行う。
+ */
+import { HUBSPOT } from '../consts';
+
+interface Props {
+  portalId?: string;
+  formId?: string;
+  region?: string;
+  /** プレースホルダー時に表示するダミー項目 */
+  placeholderFields?: { label: string; value?: string }[];
+  class?: string;
+}
+
+const {
+  portalId = HUBSPOT.portalId,
+  formId = '',
+  region = HUBSPOT.region,
+  placeholderFields = [
+    { label: '会社名' },
+    { label: '氏名' },
+    { label: 'メールアドレス' },
+    { label: '興味のある内容', value: '資料ダウンロード / デモ / 個別相談' },
+  ],
+  class: className,
+} = Astro.props;
+
+const isConfigured = Boolean(portalId && formId);
+const targetId = `hs-form-${formId || 'placeholder'}`;
+
+// HubSpot埋め込みのローダー。portalId/formId 設定後にのみ出力される。
+const embedScript = `(function(){
+  var s = document.createElement('script');
+  s.src = 'https://js.hsforms.net/forms/embed/v2.js';
+  s.async = true;
+  s.onload = function(){
+    window.hbspt.forms.create({
+      portalId: ${JSON.stringify(portalId)},
+      formId: ${JSON.stringify(formId)},
+      region: ${JSON.stringify(region)} || undefined,
+      target: '#${targetId}'
+    });
+  };
+  document.head.appendChild(s);
+})();`;
+---
+
+{
+  isConfigured ? (
+    <Fragment>
+      <div class:list={['hs-form', className]} id={targetId} />
+      <script is:inline set:html={embedScript} />
+    </Fragment>
+  ) : (
+    /* 未設定時: モックの .form-mock をそのまま表示(入力はできない) */
+    <div class:list={['form-mock', className]} aria-hidden="true">
+      {placeholderFields.map((f) => (
+        <Fragment>
+          <label>{f.label}</label>
+          {f.value ? <div class="field ta">{f.value}</div> : <div class="field" />}
+        </Fragment>
+      ))}
+    </div>
+  )
+}
+
+<style>
+  .form-mock{
+    max-width:540px;margin:0 auto 36px;background:#fff;border:1px solid var(--line);
+    border-radius:20px;padding:34px;text-align:left;box-shadow:0 30px 66px rgba(15,40,90,.3);
+    position:relative;z-index:2;
+  }
+  .form-mock label{font-size:12.5px;font-weight:700;display:block;margin-bottom:6px;color:var(--ink)}
+  .form-mock .field{background:var(--tint);border:1px solid var(--line);border-radius:10px;height:46px;margin-bottom:16px}
+  .form-mock .field.ta{height:auto;padding:11px 14px;font-size:13px;color:var(--ink-soft)}
+  .hs-form{max-width:540px;margin:0 auto 36px;position:relative;z-index:2}
+</style>

@@ -1,0 +1,328 @@
+/* ============================================================
+   webinar.css — ウェビナー一覧 / 詳細ページのCSS
+   mocks/CARA_webinar_design_mock.html(一覧)
+   mocks/CARA_webinar_detail_mock.html(詳細)から移植。
+
+   モックはページごとに .wrap 幅・本文サイズ・ボタン寸法が
+   TOPと異なるため、<body> のクラス配下にスコープしている。
+     .webinar-list   … 一覧
+     .webinar-detail … 詳細
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   ページ共通のベース差分(TOPの global.css を上書き)
+   ------------------------------------------------------------ */
+.webinar-list .wrap{max-width:1020px}
+.webinar-detail .wrap{max-width:1080px}
+
+/* 一覧: section と見出しがTOPより一段小さい */
+.webinar-list section{padding:80px 0}
+.webinar-list .trail{margin-bottom:16px}
+.webinar-list h2{font-size:clamp(24px,3.2vw,32px);margin-bottom:14px}
+.webinar-list .lead{max-width:660px;font-size:15px}
+.webinar-list .btn{font-size:14.5px;padding:14px 28px;white-space:nowrap}
+.webinar-list .btn .ico{width:16px;height:16px}
+.webinar-list .btn-lg{padding:18px 38px;font-size:16px}
+
+/* 詳細: 本文の基準サイズがやや小さい */
+.webinar-detail{line-height:1.95;font-size:15.5px}
+.webinar-detail .ico{width:20px;height:20px}
+.webinar-detail .btn{justify-content:center;font-size:15px;padding:16px 30px}
+.webinar-detail .btn .ico{width:16px;height:16px}
+.webinar-detail .btn-lg{padding:18px 36px;font-size:16px}
+.webinar-detail .reveal{transform:translateY(18px)}
+.webinar-detail .reveal.on{transform:none}
+
+/* ============================================================
+   一覧ページ
+   ============================================================ */
+
+/* ---- ページヘッダー(コンパクト) ---- */
+.page-hero{background:var(--grad);color:#fff;padding:64px 0 72px;overflow:hidden;text-align:center}
+.page-hero::before{content:'';position:absolute;right:-120px;top:-150px;width:400px;height:400px;border-radius:50%;background:rgba(255,255,255,.09)}
+.page-hero::after{content:'';position:absolute;left:-100px;bottom:-160px;width:320px;height:320px;border-radius:50%;background:rgba(255,255,255,.07)}
+.page-hero .inner{position:relative;z-index:2}
+.page-hero .trail{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.45);color:#fff;box-shadow:none}
+.page-hero h1{font-weight:900;font-size:clamp(27px,3.8vw,38px);line-height:1.5;margin-bottom:12px}
+.page-hero p{color:rgba(255,255,255,.92);max-width:600px;margin:0 auto 22px;font-size:15px}
+.ph-points{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.ph-points .chip{
+  display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:7px 15px;
+  font-size:12px;font-weight:700;color:#fff;
+}
+.ph-points .chip .ico{width:13px;height:13px}
+
+/* ---- タブ(開催予定/アーカイブ) ---- */
+.tabs{
+  display:flex;gap:8px;background:#fff;border:1px solid var(--line);border-radius:999px;
+  padding:6px;width:fit-content;margin:-28px auto 0;position:relative;z-index:5;
+  box-shadow:0 12px 32px rgba(15,40,90,.12);
+}
+.tabs a{
+  font-size:13.5px;font-weight:900;padding:11px 26px;border-radius:999px;color:var(--ink-soft);
+}
+.tabs a.on{background:var(--blue);color:#fff;box-shadow:0 6px 16px rgba(46,107,214,.3)}
+
+/* ---- 開催予定一覧 ---- */
+.webinar-list .upcoming{padding:64px 0 80px}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:26px}
+.sec-head h2{margin:0}
+.sec-head .count{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);letter-spacing:.08em}
+.sec-head .count b{color:var(--blue);font-size:18px}
+.event-list{display:grid;gap:14px}
+.event-row{
+  background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 26px;
+  display:grid;grid-template-columns:132px 1fr auto;gap:24px;align-items:center;
+  box-shadow:0 5px 16px rgba(31,51,80,.05);transition:transform .2s,box-shadow .2s,border-color .2s;
+  position:relative;
+}
+.event-row:hover{transform:translateY(-3px);box-shadow:0 14px 32px rgba(31,51,80,.11);border-color:var(--sky)}
+@media(max-width:800px){.event-row{grid-template-columns:1fr;gap:14px}}
+.event-row.next{border:2px solid var(--coral)}
+.next-badge{
+  position:absolute;top:-12px;left:22px;background:var(--coral);color:#fff;
+  font-size:11px;font-weight:900;letter-spacing:.1em;border-radius:999px;padding:4px 14px;
+  box-shadow:0 5px 12px rgba(240,101,63,.35);
+}
+.ev-date{text-align:center;background:var(--tint2);border-radius:12px;padding:12px 8px}
+.event-row.next .ev-date{background:#FDEEE8}
+.ev-date .m{font-family:var(--mono);font-size:11.5px;color:var(--blue);letter-spacing:.1em}
+.event-row.next .ev-date .m{color:var(--coral)}
+.ev-date .d{font-weight:900;font-size:27px;line-height:1.25;color:var(--ink)}
+.ev-date .t{font-size:11.5px;color:var(--ink-soft);font-weight:700}
+@media(max-width:800px){.ev-date{width:132px}}
+.ev-info h3{font-size:16px;font-weight:900;line-height:1.65;margin-bottom:4px}
+.ev-info h3 a{color:var(--ink)}
+.ev-info h3 a:hover{color:var(--blue)}
+.ev-meta{display:flex;gap:8px;flex-wrap:wrap}
+.ev-meta span{
+  display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;
+  color:var(--ink-soft);background:var(--tint);border-radius:999px;padding:4px 11px;
+}
+.ev-meta .ico{width:12px;height:12px;color:var(--teal)}
+.ev-cta{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+@media(max-width:800px){.ev-cta{flex-direction:row;align-items:center}}
+
+/* 該当0件のとき */
+.empty-note{
+  border:1.5px dashed var(--sky);border-radius:14px;background:var(--tint);
+  padding:28px 24px;text-align:center;color:var(--ink-soft);font-size:14px;
+}
+
+/* ---- アーカイブ一覧 ---- */
+.webinar-list .archive{background:var(--tint);padding:80px 0}
+.arc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
+@media(max-width:880px){.arc-grid{grid-template-columns:1fr}}
+.arc-card{
+  background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;
+  box-shadow:0 6px 18px rgba(31,51,80,.05);transition:transform .2s,box-shadow .2s;
+  display:flex;flex-direction:column;
+}
+.arc-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(31,51,80,.12)}
+.arc-thumb{height:132px;background:linear-gradient(135deg,var(--blue-deep),var(--blue));display:flex;align-items:center;justify-content:center;position:relative}
+.arc-thumb.t2{background:linear-gradient(135deg,var(--blue),#3F9BE8)}
+.arc-thumb.t3{background:linear-gradient(135deg,var(--teal),#3BC4AD)}
+.play-circle{width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(0,0,0,.25)}
+.play-circle svg{width:18px;height:18px;fill:var(--blue);stroke:var(--blue);margin-left:2px}
+.gate-badge{
+  position:absolute;top:10px;right:10px;background:rgba(255,255,255,.94);color:var(--coral);
+  font-size:10px;font-weight:900;letter-spacing:.06em;border-radius:999px;padding:4px 10px;
+  display:inline-flex;align-items:center;gap:4px;
+}
+.gate-badge .ico{width:10px;height:10px}
+.arc-body{padding:18px 20px 22px;flex:1;display:flex;flex-direction:column}
+.arc-body .date{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);letter-spacing:.08em;margin-bottom:6px}
+.arc-body h3{font-size:14px;font-weight:900;line-height:1.7;flex:1}
+.arc-body h3 a{color:var(--ink)}
+.arc-body h3 a:hover{color:var(--blue)}
+
+/* ---- 特典コンパクト帯 ---- */
+.webinar-list .perks{padding:70px 0}
+.perk-strip{
+  background:#fff;border:1px solid var(--line);border-radius:18px;padding:30px 34px;
+  display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:center;
+  box-shadow:0 10px 28px rgba(31,51,80,.07);
+}
+@media(max-width:820px){.perk-strip{grid-template-columns:1fr}}
+.perk-strip .head{font-weight:900;font-size:17px;display:flex;align-items:center;gap:10px;white-space:nowrap}
+.perk-strip .head .ico{color:var(--coral)}
+.perk-items{display:flex;gap:10px 22px;flex-wrap:wrap}
+.perk-items span{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;color:var(--ink-soft)}
+.perk-items .ico{width:17px;height:17px;color:var(--teal)}
+
+/* ---- クロージング(一覧) ---- */
+.webinar-list .closing{background:var(--grad);color:#fff;text-align:center;padding:88px 0;overflow:hidden}
+.webinar-list .closing::before{content:'';position:absolute;left:50%;top:-160px;transform:translateX(-50%);width:520px;height:520px;border-radius:50%;background:rgba(255,255,255,.08)}
+.webinar-list .closing h2{color:#fff;position:relative;z-index:2}
+.webinar-list .closing p{color:rgba(255,255,255,.92);max-width:520px;margin:0 auto 32px;position:relative;z-index:2}
+.webinar-list .closing .btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;z-index:2}
+
+/* ============================================================
+   詳細ページ
+   ============================================================ */
+
+/* ---- イベントヒーロー ---- */
+.ev-hero{background:var(--grad);color:#fff;padding:52px 0 120px;position:relative;overflow:hidden}
+.ev-hero::before{content:'';position:absolute;right:-120px;top:-150px;width:420px;height:420px;border-radius:50%;background:rgba(255,255,255,.09)}
+.ev-hero::after{content:'';position:absolute;left:-90px;bottom:-140px;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,.07)}
+.ev-hero .inner{position:relative;z-index:2;max-width:760px}
+.status-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.status{
+  display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:7px 16px;
+  font-size:12px;font-weight:900;letter-spacing:.06em;
+}
+.status.open{background:#fff;color:var(--coral)}
+.status.open::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--coral);animation:blink 1.6s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.status.free{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.5);color:#fff}
+.ev-hero h1{font-weight:900;font-size:clamp(23px,3.3vw,34px);line-height:1.62;margin-bottom:18px}
+.ev-hero .datetime{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700}
+.ev-hero .datetime .ico{width:19px;height:19px}
+.ev-hero .datetime b{font-size:21px}
+.tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.tag-row span{font-size:11.5px;font-weight:700;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:5px 13px}
+
+/* ---- 2カラムレイアウト ---- */
+.layout{display:grid;grid-template-columns:1fr 332px;gap:36px;align-items:start;margin-top:-64px;position:relative;z-index:5;padding-bottom:90px}
+@media(max-width:920px){.layout{grid-template-columns:1fr}}
+.main-col{min-width:0}
+
+/* 申込カード(サイド固定)
+   ※ モックCSSにある .cap / .cap-bar(残席メーター)は、
+     「残席数の表示機能は作らない」という決定事項のため移植していない。 */
+.apply-card{
+  position:sticky;top:88px;background:#fff;border:1px solid var(--line);border-radius:20px;
+  padding:28px 26px;box-shadow:0 24px 56px rgba(15,40,90,.16);
+}
+@media(max-width:920px){.apply-card{position:static;order:-1}}
+.apply-rows{border-top:1px solid var(--line);margin-bottom:20px}
+.apply-row{display:flex;gap:12px;padding:12px 2px;border-bottom:1px solid var(--line);font-size:13px;align-items:flex-start}
+.apply-row .ico{width:17px;height:17px;color:var(--blue);margin-top:5px}
+.apply-row b{display:block;font-size:13.5px}
+.apply-row small{color:var(--ink-soft);font-size:12px}
+.apply-card .btn{width:100%}
+.apply-card .cal-link{
+  display:flex;align-items:center;justify-content:center;gap:7px;margin-top:14px;
+  font-size:12.5px;font-weight:700;color:var(--ink-soft);
+}
+.apply-card .cal-link .ico{width:14px;height:14px}
+.deadline{
+  margin-top:16px;background:#FDEEE8;border-radius:10px;padding:10px 14px;
+  font-size:12px;font-weight:700;color:var(--coral);text-align:center;
+}
+
+/* ---- 本文セクション ---- */
+.block{
+  background:#fff;border:1px solid var(--line);border-radius:20px;padding:34px 36px;
+  margin-bottom:22px;box-shadow:0 8px 24px rgba(31,51,80,.05);
+}
+@media(max-width:600px){.block{padding:26px 22px}}
+.block h2{
+  font-weight:900;font-size:20px;line-height:1.6;margin-bottom:18px;
+  display:flex;align-items:center;gap:11px;
+}
+.block h2 .b-ico{
+  width:38px;height:38px;border-radius:11px;background:var(--tint2);color:var(--blue);
+  display:flex;align-items:center;justify-content:center;flex:none;
+}
+.block h2 .b-ico .ico{width:19px;height:19px}
+.block p{color:var(--ink-soft);font-size:14.5px;margin-bottom:14px}
+.block p:last-child{margin-bottom:0}
+.block p b{color:var(--ink)}
+
+/* おすすめリスト */
+.rec-list li{
+  list-style:none;display:flex;gap:12px;padding:11px 15px;margin-bottom:9px;
+  font-size:14px;background:var(--tint);border-radius:11px;align-items:flex-start;
+}
+.rec-list li .ico{width:18px;height:18px;color:var(--teal);margin-top:6px}
+.rec-list li b{color:var(--blue-deep)}
+
+/* アジェンダ4軸 */
+.axis{display:grid;gap:14px}
+.axis-item{
+  border:1px solid var(--line);border-radius:14px;padding:20px 22px;
+  display:grid;grid-template-columns:44px 1fr;gap:16px;align-items:start;background:var(--tint);
+}
+.axis-item .a-no{
+  width:44px;height:44px;border-radius:12px;background:#fff;border:1.5px solid var(--sky);
+  display:flex;align-items:center;justify-content:center;color:var(--blue);
+  font-family:var(--mono);font-weight:500;font-size:15px;
+}
+.axis-item h3{font-size:15.5px;font-weight:900;margin-bottom:4px;line-height:1.65}
+.axis-item p{font-size:13.5px;margin:0}
+.axis-item.hl{background:var(--tint2);border-color:var(--sky)}
+.axis-item.hl .a-no{background:var(--blue);color:#fff;border-color:var(--blue)}
+
+/* 開催概要テーブル */
+.spec{width:100%;border-collapse:collapse;font-size:14px}
+.spec th{
+  text-align:left;width:130px;padding:13px 14px;background:var(--tint);color:var(--ink);
+  font-weight:900;border-bottom:2px solid #fff;border-radius:8px 0 0 8px;vertical-align:top;font-size:13px;
+}
+.spec td{padding:13px 16px;border-bottom:1px solid var(--line);color:var(--ink-soft)}
+.spec tr:last-child td{border-bottom:none}
+@media(max-width:600px){.spec th{width:96px;padding:11px 10px}}
+
+/* 当日の案内 */
+.day-notes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:600px){.day-notes{grid-template-columns:1fr}}
+.day-notes span{
+  display:flex;align-items:flex-start;gap:9px;font-size:13.5px;color:var(--ink-soft);
+  background:var(--tint);border-radius:10px;padding:11px 14px;font-weight:500;
+}
+.day-notes .ico{width:16px;height:16px;color:var(--teal);margin-top:5px}
+
+/* 特典 */
+.perk-box{
+  background:var(--teal-soft);border-radius:14px;padding:20px 24px;display:flex;gap:16px;align-items:flex-start;
+}
+.perk-box .ico{width:26px;height:26px;color:var(--teal);margin-top:4px}
+.perk-box b{color:var(--teal)}
+.perk-box p{margin:0;font-size:14px}
+
+/* 登壇者 */
+.speaker{display:grid;grid-template-columns:96px 1fr;gap:22px;align-items:start}
+@media(max-width:600px){.speaker{grid-template-columns:1fr}}
+.sp-avatar{
+  width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,var(--tint2),var(--sky));
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.sp-avatar svg{width:96px;height:96px}
+.speaker .name{font-size:17px;font-weight:900}
+.speaker .role{font-size:12.5px;font-weight:700;color:var(--blue);margin-bottom:8px}
+.speaker p{font-size:13.5px;margin:0}
+
+/* CARAとは(ミニ) */
+.about-mini{background:var(--grad);color:#fff;border:none}
+.about-mini h2{color:#fff}
+.about-mini h2 .b-ico{background:rgba(255,255,255,.15);color:#fff}
+.about-mini p{color:rgba(255,255,255,.92)}
+.about-mini .mini-stats{display:flex;gap:24px;flex-wrap:wrap;margin:16px 0 18px}
+.about-mini .ms b{font-family:var(--mono);font-size:24px;font-weight:500;display:block;line-height:1.2}
+.about-mini .ms span{font-size:11.5px;opacity:.85;font-weight:700}
+.about-mini .btn{background:#fff;color:var(--blue)}
+
+/* 申込フォーム */
+.apply-form-block .form-mock,
+.apply-form-block .hs-form{margin-bottom:0;box-shadow:none;border-radius:14px}
+
+/* アーカイブ動画 */
+.archive-video{position:relative;padding-top:56.25%;border-radius:14px;overflow:hidden;background:var(--ink)}
+.archive-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
+/* 注意事項 */
+.notes-list li{
+  list-style:none;font-size:12.5px;color:var(--ink-soft);padding:7px 0 7px 18px;position:relative;
+  border-bottom:1px dashed var(--line);
+}
+.notes-list li::before{content:'※';position:absolute;left:0;color:var(--ink-soft)}
+.notes-list li:last-child{border-bottom:none}
+
+/* 下部CTA */
+.bottom-cta{background:var(--grad);color:#fff;text-align:center;padding:80px 0;overflow:hidden;position:relative}
+.bottom-cta::before{content:'';position:absolute;left:50%;top:-150px;transform:translateX(-50%);width:500px;height:500px;border-radius:50%;background:rgba(255,255,255,.08)}
+.bottom-cta h2{font-weight:900;font-size:clamp(23px,3.2vw,32px);line-height:1.6;margin-bottom:10px;position:relative;z-index:2}
+.bottom-cta p{color:rgba(255,255,255,.92);margin-bottom:30px;position:relative;z-index:2}
+.bottom-cta .btn{position:relative;z-index:2}

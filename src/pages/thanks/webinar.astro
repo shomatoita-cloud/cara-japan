@@ -1,0 +1,32 @@
+---
+/**
+ * 汎用サンクス — ウェビナー申込後。
+ * HubSpotのウェビナー申込フォームのリダイレクト先に設定する。
+ * 回ごとにページを分けず1枚で受けるため、日時は記載しない(視聴URLはメールで案内)。
+ */
+import Thanks from '../../layouts/Thanks.astro';
+---
+
+<Thanks
+  title="ウェビナーのお申し込みありがとうございます | CARA Platform 日本版"
+  heading="お申し込みありがとうございました"
+  lead="ご登録を受け付けました。当日の視聴URLはメールでご案内します。"
+>
+  <div class="thanks-card">
+    <div class="dl-title">お申し込みが完了しました</div>
+    <p class="dl-note">
+      開催前日までに、視聴URLをご入力いただいたメールアドレス宛にお送りします。
+      開始5分前から入室いただけます。
+    </p>
+    <a class="btn btn-coral btn-lg" href="/webinars">
+      <svg class="ico"><use href="#i-cal" /></svg>ほかのウェビナーを見る
+    </a>
+    <div class="mail-note">
+      <svg class="ico"><use href="#i-mail" /></svg>
+      <span>
+        受付確認の自動返信メールをお送りしています。届かない場合は迷惑メールフォルダをご確認ください。
+        カメラ・マイクはオフのままご参加いただけます。
+      </span>
+    </div>
+  </div>
+</Thanks>

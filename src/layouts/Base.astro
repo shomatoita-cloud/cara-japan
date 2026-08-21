@@ -1,0 +1,146 @@
+---
+/**
+ * Base.astro — 全ページ共通レイアウト
+ * head(メタ/フォント/color-scheme固定)+ ヘッダー/フッター/モバイル固定CTA。
+ */
+import '../styles/tokens.css';
+import '../styles/global.css';
+import IconSprite from '../components/IconSprite.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import StickyCta from '../components/StickyCta.astro';
+import { SITE } from '../consts';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** OGP画像(public/images/ 配下の相対パス想定) */
+  ogImage?: string;
+  /** 検索避け(サンクスページ等で true) */
+  noindex?: boolean;
+  /**
+   * <body> に付けるクラス。ページ種別ごとのCSSスコープに使う。
+   * モックはページごとに .wrap 幅や本文サイズが異なるため、
+   * 各ページのCSS(例 webinar.css)はこのクラス配下に閉じ込める。
+   */
+  bodyClass?: string;
+  /** ヘッダーのナビでカレント表示にする href(例 '/webinars') */
+  navCurrent?: string;
+  /** モバイル固定CTAの差し替え。null で非表示 */
+  stickyCta?: { href: string; label: string; info?: string; icon?: string } | null;
+}
+
+const {
+  title,
+  description = SITE.description,
+  ogImage = '/images/ogp.png',
+  noindex = false,
+  bodyClass,
+  navCurrent,
+  stickyCta,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImageUrl = new URL(ogImage, Astro.site);
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- ダークモード反転防止(全ページ必須) -->
+    <meta name="color-scheme" content="light only" />
+    <meta name="supported-color-schemes" content="light" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+
+    <!-- OGP -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="CARA Platform Japan" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:locale" content="ja_JP" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <!-- Google Fonts: Noto Sans JP 400/500/700/900 + IBM Plex Mono 400/500 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <slot name="head" />
+  </head>
+
+  <body class={bodyClass}>
+    <IconSprite />
+    <Header navCurrent={navCurrent} />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    {stickyCta !== null && <StickyCta {...stickyCta} />}
+
+    <script>
+      // mocks/CARA_TOP_design_mock.html の末尾スクリプトを移植。
+      // ① スクロール出現(.reveal) ② 統計のカウントアップ([data-count])
+      // マーキーと浮遊はCSSアニメーションのため、ここでは扱わない。
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add('on');
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.12 }
+      );
+      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+      const nums = document.querySelectorAll<HTMLElement>('[data-count]');
+
+      function animate(el: HTMLElement) {
+        const target = Number(el.dataset.count);
+        const dur = 1600;
+        const t0 = performance.now();
+        function step(t: number) {
+          const p = Math.min((t - t0) / dur, 1);
+          const eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(target * eased).toLocaleString();
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+
+      if (reduced) {
+        // 動きを減らす設定では最終値を即表示する
+        nums.forEach((n) => (n.textContent = Number(n.dataset.count).toLocaleString()));
+      } else {
+        const numIO = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                animate(e.target as HTMLElement);
+                numIO.unobserve(e.target);
+              }
+            });
+          },
+          { threshold: 0.5 }
+        );
+        nums.forEach((n) => numIO.observe(n));
+      }
+    </script>
+  </body>
+</html>

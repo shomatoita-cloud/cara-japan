@@ -1,0 +1,194 @@
+---
+/**
+ * 資料詳細 — mocks/CARA_whitepaper_detail_mock.html を正として移植。
+ * src/content/whitepapers/*.mdx から自動生成される。
+ * スラッグ = MDXのファイル名(例 hidden-costs → /whitepapers/hidden-costs/)。
+ *
+ * DLフォームは HubspotForm.astro。送信後の遷移先(/thanks/[slug])は HubSpot 側で設定する。
+ */
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import HubspotForm from '../../components/HubspotForm.astro';
+import Cover from '../../components/Cover.astro';
+import { WHITEPAPER } from '../../consts';
+import '../../styles/whitepaper.css';
+
+export const getStaticPaths = (async () => {
+  const all = await getCollection('whitepapers');
+  return all.map((d) => ({
+    params: { slug: d.id },
+    // 関連資料は同じコレクションの他の資料から最大2件
+    props: { doc: d, related: all.filter((x) => x.id !== d.id).slice(0, 2) },
+  }));
+}) satisfies GetStaticPaths;
+
+const { doc, related } = Astro.props;
+const d = doc.data;
+const meta = WHITEPAPER.categoryMeta[d.category];
+const { Content } = await render(doc);
+
+const dlFlowLines = WHITEPAPER.dlFlow.split('\n');
+---
+
+<Base
+  title={`${d.title} | 資料ダウンロード | CARA Platform 日本版`}
+  description={d.description}
+  bodyClass="whitepaper-detail"
+  navCurrent="/whitepapers"
+  stickyCta={{ href: '#dlform', label: '無料でダウンロード', icon: 'i-dl' }}
+>
+  <Breadcrumbs
+    items={[
+      { label: 'TOP', href: '/' },
+      { label: '資料ダウンロード', href: '/whitepapers' },
+      { label: d.title },
+    ]}
+  />
+
+  {/* ヒーロー */}
+  <section class="wp-hero">
+    <div class="wrap grid">
+      <div>
+        <span class="doc-tag">
+          <svg class="ico"><use href={`#${meta.icon}`} /></svg>{meta.label}
+        </span>
+        <h1>{d.title}</h1>
+        <p class="sub">{d.description}</p>
+        <div class="doc-meta">
+          {d.pages && <span><svg class="ico"><use href="#i-pages" /></svg>{d.pages} / PDF</span>}
+          {d.readTime && <span><svg class="ico"><use href="#i-clock" /></svg>{d.readTime}</span>}
+          <span><svg class="ico"><use href="#i-check" /></svg>無料ダウンロード</span>
+        </div>
+      </div>
+      <Cover {...d.cover} size="lg" hero={true} />
+    </div>
+  </section>
+
+  <div class="wrap layout">
+    <div class="main-col">
+      {/* この資料について */}
+      <div class="block reveal">
+        <h2><span class="b-ico"><svg class="ico"><use href="#i-info" /></svg></span>この資料について</h2>
+        {/* MDX本文 = 資料の説明 */}
+        <Content />
+        {
+          d.keyStats && d.keyStats.length > 0 && (
+            <div class="key-stats">
+              {d.keyStats.map((s) => (
+                <div class="ks">
+                  <b>{s.value}</b>
+                  <span set:html={s.label.replace(/\n/g, '<br>')} />
+                </div>
+              ))}
+            </div>
+          )
+        }
+      </div>
+
+      {/* この資料でわかること */}
+      <div class="block reveal">
+        <h2><span class="b-ico"><svg class="ico"><use href="#i-check" /></svg></span>この資料でわかること</h2>
+        <ul class="learn-list">
+          {d.learnPoints.map((p) => (
+            <li><svg class="ico"><use href="#i-check" /></svg><span>{p}</span></li>
+          ))}
+        </ul>
+      </div>
+
+      {/* 目次 */}
+      <div class="block reveal">
+        <h2><span class="b-ico"><svg class="ico"><use href="#i-list" /></svg></span>目次</h2>
+        <ol class="toc">
+          {d.toc.map((t) => (
+            <li>
+              <span>
+                {t.title}
+                {t.sub && <small>{t.sub}</small>}
+              </span>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      {/* こんな方におすすめ(未指定なら描画しない) */}
+      {
+        d.recommendedFor && d.recommendedFor.length > 0 && (
+          <div class="block reveal">
+            <h2><span class="b-ico"><svg class="ico"><use href="#i-target" /></svg></span>こんな方におすすめ</h2>
+            <ul class="rec-list">
+              {d.recommendedFor.map((r) => (
+                <li><svg class="ico"><use href="#i-check" /></svg><span>{r}</span></li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+
+      {/* 資料概要 */}
+      <div class="block reveal">
+        <h2><span class="b-ico"><svg class="ico"><use href="#i-info" /></svg></span>資料概要</h2>
+        <table class="spec">
+          <tbody>
+            <tr><th>資料名</th><td>{d.title}</td></tr>
+            <tr><th>形式</th><td>{d.pages ? `PDF(${d.pages})` : 'PDF'}</td></tr>
+            <tr><th>発行</th><td>{WHITEPAPER.publisher}</td></tr>
+            <tr><th>料金</th><td>{WHITEPAPER.fee}</td></tr>
+            <tr><th>提供方法</th><td>{WHITEPAPER.delivery}</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* 関連資料 */}
+      {
+        related.length > 0 && (
+          <div class="block reveal">
+            <h2><span class="b-ico"><svg class="ico"><use href="#i-doc" /></svg></span>関連資料</h2>
+            <div class="rel-grid">
+              {related.map((r) => (
+                <a class="rel-card" href={`/whitepapers/${r.id}/`}>
+                  <span class="r-tag">{WHITEPAPER.categoryMeta[r.data.category].label}</span>
+                  <span class="r-title">{r.data.title}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        )
+      }
+    </div>
+
+    {/* サイドDLフォーム */}
+    <aside class="dl-card reveal" id="dlform">
+      <div class="dl-head"><svg class="ico"><use href="#i-dl" /></svg>{WHITEPAPER.dlHeading}</div>
+      <p class="dl-sub">{WHITEPAPER.dlSub}</p>
+      {/* hubspotFormId はMDXのfrontmatterから。未設定のあいだはプレースホルダー表示 */}
+      <HubspotForm
+        formId={d.hubspotFormId}
+        placeholderFields={[
+          { label: '会社名' },
+          { label: '氏名' },
+          { label: '会社メールアドレス' },
+          { label: '部署・役職' },
+        ]}
+      />
+      <div class="dl-flow">
+        {dlFlowLines.map((l, i) => (
+          <Fragment>
+            {i > 0 && <br />}
+            {l}
+          </Fragment>
+        ))}
+      </div>
+    </aside>
+  </div>
+
+  {/* 下部CTA */}
+  <section class="bottom-cta">
+    <div class="wrap">
+      <h2 class="reveal">読んだあとは、"自社の場合"を<br />確かめてみませんか。</h2>
+      <p class="reveal">無料デモ・個別相談で、貴社の業務に合わせて具体化します。</p>
+      <a class="btn btn-coral btn-lg reveal" href="/#contact">無料デモ・個別相談を申し込む</a>
+    </div>
+  </section>
+</Base>

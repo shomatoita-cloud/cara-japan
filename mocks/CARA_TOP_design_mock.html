@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
+<title>CARA Platform 日本版 | 規制業界のためのコンテンツ・データ・プロセス管理</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light only;
+  --bg:#FFFFFF;
+  --tint:#F8FBFE;
+  --tint2:#F0F6FD;
+  --ink:#1F3350;
+  --ink-soft:#42536C;
+  --blue:#2E6BD6;
+  --blue-deep:#1F4FA8;
+  --sky:#C7DDF7;
+  --teal:#1FA48E;
+  --teal-soft:#EAF9F5;
+  --coral:#F0653F;
+  --line:#E9F0F8;
+  --grad:linear-gradient(118deg,#1F4FA8 0%,#2E6BD6 48%,#3F9BE8 100%);
+  --grad-soft:linear-gradient(118deg,#2E6BD6,#3F9BE8);
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'Noto Sans JP',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;background:#FFFFFF}
+body{font-family:var(--sans);background:var(--bg) !important;color:var(--ink);line-height:1.9;font-size:16px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+section{background:var(--bg)}
+img{max-width:100%}
+a{color:var(--blue);text-decoration:none}
+.ico{width:22px;height:22px;stroke:currentColor;stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ico-lg{width:30px;height:30px}
+
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+section{padding:100px 0;position:relative}
+.trail{
+  display:inline-flex;align-items:center;gap:8px;margin-bottom:18px;
+  font-size:13px;font-weight:900;letter-spacing:.1em;color:var(--blue);
+  background:#fff;border:1.5px solid var(--sky);border-radius:999px;padding:8px 20px;
+  box-shadow:0 3px 10px rgba(31,51,80,.07);
+}
+.trail .ico{width:14px;height:14px}
+h2{font-weight:900;font-size:clamp(27px,3.8vw,40px);line-height:1.5;margin-bottom:20px;letter-spacing:.01em}
+h2 .u{background:linear-gradient(transparent 70%,rgba(31,164,142,.28) 70%)}
+.lead{max-width:680px;color:var(--ink-soft)}
+.center{text-align:center}
+.center .lead{margin:0 auto}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
+.reveal.on{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  *{animation:none!important;transition:none!important}
+}
+
+/* ---- ボタン ---- */
+.btn{
+  display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:15px;
+  padding:16px 32px;border-radius:999px;letter-spacing:.03em;
+  transition:transform .18s,box-shadow .18s;
+}
+.btn .ico{width:17px;height:17px}
+.btn:hover{transform:translateY(-3px)}
+.btn-primary{background:var(--blue);color:#fff;box-shadow:0 8px 22px rgba(46,107,214,.3)}
+.btn-primary:hover{box-shadow:0 12px 28px rgba(46,107,214,.38)}
+.btn-coral{background:var(--coral);color:#fff;box-shadow:0 8px 22px rgba(240,101,63,.32)}
+.btn-ghost{border:2px solid var(--blue);color:var(--blue);background:#fff}
+.btn-lg{padding:19px 40px;font-size:16.5px}
+
+/* ---- ヘッダー ---- */
+header{position:sticky;top:0;z-index:90;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+.logo{font-family:var(--mono);font-weight:500;font-size:18px;letter-spacing:.06em;display:flex;align-items:center;gap:10px}
+.logo b{color:var(--blue)}
+.logo-mark{width:28px;height:28px;border-radius:9px;background:linear-gradient(135deg,var(--blue),var(--teal));display:flex;align-items:center;justify-content:center}
+.logo-mark svg{width:15px;height:15px;stroke:#fff}
+.nav-links{display:flex;gap:24px;font-size:13.5px;font-weight:700}
+.nav-links a{color:var(--ink-soft)}
+.nav-links a:hover{color:var(--blue)}
+.nav-cta{font-size:13.5px;padding:11px 22px}
+@media(max-width:980px){.nav-links{display:none}}
+
+/* ---- ① ヒーロー ---- */
+.hero{
+  padding:88px 0 0;overflow:hidden;
+  background:
+    radial-gradient(760px 480px at 88% 0%,var(--tint2),transparent 62%),
+    radial-gradient(560px 420px at 0% 100%,var(--teal-soft),transparent 55%),
+    var(--bg);
+}
+.hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:44px;align-items:center;padding-bottom:78px}
+@media(max-width:940px){.hero-grid{grid-template-columns:1fr;gap:40px}}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;
+  color:var(--teal);background:var(--teal-soft);border-radius:999px;padding:8px 18px;
+  margin-bottom:22px;letter-spacing:.04em;
+}
+.hero-eyebrow .ico{width:15px;height:15px}
+.hero h1{font-weight:900;font-size:clamp(31px,4.7vw,50px);line-height:1.48;letter-spacing:.01em;margin-bottom:22px}
+.hero h1 .blue{background:var(--grad-soft);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero h1 .marker{background:linear-gradient(transparent 68%,rgba(31,164,142,.3) 68%)}
+.hero-sub{color:var(--ink-soft);max-width:520px;margin-bottom:34px;font-size:16.5px}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:36px}
+.trustbar{display:flex;gap:10px;flex-wrap:wrap}
+.chip{
+  display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--line);
+  border-radius:999px;padding:8px 15px;font-size:12px;font-weight:700;color:var(--ink-soft);
+  box-shadow:0 3px 10px rgba(31,51,80,.05);
+}
+.chip .ico{width:14px;height:14px;color:var(--teal)}
+
+/* ヒーローイラスト */
+.hero-art{position:relative}
+.hero-art svg{width:100%;height:auto;display:block;filter:drop-shadow(0 26px 40px rgba(31,51,80,.12))}
+.float{animation:float 5s ease-in-out infinite}
+.float.d1{animation-delay:1.2s}
+.float.d2{animation-delay:2.4s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+
+/* 統計帯 */
+.stats{background:var(--grad);position:relative;z-index:2}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr)}
+@media(max-width:760px){.stats-grid{grid-template-columns:1fr}}
+.stat{padding:38px 20px;text-align:center;border-right:1px solid rgba(255,255,255,.25)}
+.stat:last-child{border-right:none}
+@media(max-width:760px){.stat{border-right:none;border-bottom:1px solid rgba(255,255,255,.25)}}
+.stat .num{font-family:var(--mono);font-weight:500;font-size:clamp(32px,4.2vw,46px);color:#fff;line-height:1.15}
+.stat .num em{font-style:normal;color:#BFE3FF;font-size:.55em}
+.stat .lbl{font-size:13px;color:rgba(255,255,255,.92);letter-spacing:.08em;margin-top:6px;font-weight:700}
+
+/* ---- ② 課題 ---- */
+.pain{background:var(--tint)}
+.pain-list{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:38px}
+@media(max-width:760px){.pain-list{grid-template-columns:1fr}}
+.pain-item{
+  background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px 28px;
+  font-size:15px;display:flex;gap:18px;align-items:flex-start;
+  box-shadow:0 6px 18px rgba(31,51,80,.05);transition:transform .2s,box-shadow .2s;
+}
+.pain-item:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(31,51,80,.1)}
+.p-ico{
+  width:50px;height:50px;border-radius:14px;flex:none;display:flex;align-items:center;justify-content:center;
+}
+.p-ico.c1{background:var(--tint2);color:var(--blue)}
+.p-ico.c2{background:#FDEEE8;color:var(--coral)}
+.p-ico.c3{background:var(--teal-soft);color:var(--teal)}
+.p-ico.c4{background:#F0EDFB;color:#6C5CE7}
+.pain-item b{color:var(--blue-deep)}
+.bridge{margin-top:46px;font-size:clamp(18px,2.3vw,22px);font-weight:900;text-align:center}
+.bridge .em{color:var(--teal)}
+
+/* ---- ③ CARAとは ---- */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;margin-top:6px}
+@media(max-width:940px){.about-grid{grid-template-columns:1fr}}
+.about-copy p{margin-bottom:18px;color:var(--ink-soft);font-size:15.5px}
+.about-copy p b{color:var(--ink);background:linear-gradient(transparent 72%,var(--sky) 72%)}
+.scene{margin-top:24px}
+.scene li{
+  list-style:none;display:flex;gap:13px;padding:13px 16px;margin-bottom:10px;
+  font-size:14.5px;background:var(--tint);border-radius:12px;align-items:flex-start;
+}
+.scene li .ico{width:20px;height:20px;color:var(--teal);margin-top:5px}
+.diagram{
+  background:#fff;border:1px solid var(--line);border-radius:22px;
+  padding:40px 32px 32px;text-align:center;box-shadow:0 22px 54px rgba(31,51,80,.09);
+}
+.d-nodes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.d-node{
+  border:1px solid var(--line);border-radius:14px;padding:16px 8px 13px;font-size:12.5px;
+  font-weight:700;background:var(--tint);display:flex;flex-direction:column;align-items:center;gap:6px;
+  transition:transform .2s,box-shadow .2s;
+}
+.d-node:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(46,107,214,.14);background:#fff}
+.d-node .ico{color:var(--blue);width:22px;height:22px}
+.d-node small{font-weight:500;font-size:10.5px;color:var(--ink-soft)}
+.d-core{
+  margin:8px auto 14px;width:220px;padding:20px 10px;
+  background:linear-gradient(135deg,var(--blue),var(--teal));color:#fff;
+  border-radius:14px;font-family:var(--mono);font-size:17px;letter-spacing:.12em;
+  box-shadow:0 14px 34px rgba(46,107,214,.32);
+}
+.d-core small{display:block;font-family:var(--sans);font-size:10.5px;opacity:.92;letter-spacing:.02em}
+.d-base{
+  background:var(--teal-soft);border-radius:12px;padding:13px 10px;
+  font-size:12.5px;font-weight:700;color:var(--teal);letter-spacing:.06em;
+}
+.d-base small{display:block;font-weight:500;color:var(--ink-soft);letter-spacing:.02em;font-size:11px}
+
+/* ---- ④ 3つの理由 ---- */
+.reasons{background:var(--grad);overflow:hidden}
+.reasons::before{
+  content:'';position:absolute;right:-140px;top:-140px;width:460px;height:460px;border-radius:50%;
+  background:rgba(255,255,255,.09);pointer-events:none;
+}
+.reasons::after{
+  content:'';position:absolute;left:-100px;bottom:-160px;width:360px;height:360px;border-radius:50%;
+  background:rgba(255,255,255,.06);pointer-events:none;
+}
+.reasons h2{color:#fff}
+.reasons h2 .u{background:linear-gradient(transparent 70%,rgba(255,255,255,.35) 70%)}
+.reasons .trail{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.45);color:#fff;box-shadow:none}
+.reason-list{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:46px;position:relative;z-index:2}
+@media(max-width:880px){.reason-list{grid-template-columns:1fr}}
+.reason{
+  background:#fff;border:1px solid var(--line);border-radius:20px;padding:36px 30px 32px;
+  position:relative;box-shadow:0 10px 28px rgba(31,51,80,.07);
+  transition:transform .22s,box-shadow .22s;display:flex;flex-direction:column;
+}
+.reason:hover{transform:translateY(-6px);box-shadow:0 24px 50px rgba(31,51,80,.13)}
+.reason .no{
+  position:absolute;top:-16px;left:26px;background:var(--blue);color:#fff;
+  font-family:var(--mono);font-size:12px;letter-spacing:.12em;border-radius:999px;padding:5px 15px;
+  box-shadow:0 6px 14px rgba(46,107,214,.3);
+}
+.reason.feat .no{background:var(--coral);box-shadow:0 6px 14px rgba(240,101,63,.32)}
+.reason .r-art{height:110px;display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+.reason .r-art svg{height:100px;width:auto}
+.reason h3{font-size:19px;font-weight:900;margin-bottom:10px;line-height:1.6}
+.reason p{font-size:13.8px;color:var(--ink-soft);flex:1}
+.reason .kicker{
+  margin-top:16px;padding:9px 14px;background:#FDEEE8;color:var(--coral);
+  border-radius:10px;font-size:12.5px;font-weight:700;line-height:1.6;
+}
+
+/* ---- ⑤ 実演 ---- */
+.demo-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:44px}
+@media(max-width:880px){.demo-cards{grid-template-columns:1fr}}
+.demo-card{
+  background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;
+  display:flex;flex-direction:column;box-shadow:0 8px 24px rgba(31,51,80,.06);
+  transition:transform .22s,box-shadow .22s;
+}
+.demo-card:hover{transform:translateY(-5px);box-shadow:0 22px 46px rgba(31,51,80,.12)}
+.ui-mock{background:linear-gradient(150deg,var(--tint2),var(--tint));padding:20px;border-bottom:1px solid var(--line)}
+.ui-win{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 10px 24px rgba(31,51,80,.1)}
+.ui-bar{display:flex;gap:5px;padding:9px 12px;border-bottom:1px solid var(--line);background:var(--tint)}
+.ui-bar i{width:8px;height:8px;border-radius:50%;background:var(--sky)}
+.ui-bar i:first-child{background:var(--coral)}
+.ui-body{padding:13px 13px 15px}
+.ui-line{height:7px;border-radius:99px;background:var(--tint2);margin-bottom:7px}
+.ui-line.w60{width:60%}.ui-line.w80{width:80%}
+.ui-ai{border:1.5px solid rgba(46,107,214,.4);background:var(--tint2);border-radius:9px;padding:10px 11px;margin-top:10px}
+.ui-ai .tag-ai{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;color:var(--blue);margin-bottom:7px;font-weight:500}
+.ui-ai .tag-ai .ico{width:11px;height:11px}
+.ui-ai .ui-line{background:var(--sky)}
+.ui-verified{display:flex;justify-content:flex-end;margin-top:9px}
+.ui-verified span{
+  font-family:var(--mono);font-size:8.5px;letter-spacing:.06em;color:var(--teal);
+  border-radius:99px;padding:4px 10px;display:inline-flex;gap:5px;align-items:center;
+  background:var(--teal-soft);font-weight:500;
+}
+.ui-verified .ico{width:10px;height:10px}
+.demo-body{padding:24px 26px 28px}
+.demo-body h3{font-size:16.5px;font-weight:900;margin-bottom:8px;display:flex;align-items:center;gap:9px}
+.demo-body h3 .ico{color:var(--blue);width:19px;height:19px}
+.demo-body p{font-size:13.5px;color:var(--ink-soft)}
+.mid-cta{text-align:center;margin-top:46px}
+
+/* ---- ⑥ 事例 ---- */
+.cases{background:var(--tint)}
+.marquee{
+  overflow:hidden;margin:34px 0 42px;
+  mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+}
+.marquee-track{display:flex;gap:14px;width:max-content;animation:marq 26s linear infinite}
+.marquee:hover .marquee-track{animation-play-state:paused}
+@keyframes marq{to{transform:translateX(-50%)}}
+.logo-cell{
+  border:1px solid var(--line);border-radius:999px;background:#fff;
+  padding:14px 32px;font-family:var(--mono);font-size:13.5px;letter-spacing:.12em;color:var(--ink-soft);
+  white-space:nowrap;box-shadow:0 4px 12px rgba(31,51,80,.05);
+}
+.case-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media(max-width:760px){.case-grid{grid-template-columns:1fr}}
+.case-card{
+  border:1px solid var(--line);border-radius:18px;padding:32px 32px 28px;background:#fff;
+  box-shadow:0 8px 24px rgba(31,51,80,.06);transition:transform .2s,box-shadow .2s;
+}
+.case-card:hover{transform:translateY(-4px);box-shadow:0 20px 42px rgba(31,51,80,.11)}
+.case-card .tag{
+  display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;
+  letter-spacing:.08em;margin-bottom:14px;border-radius:999px;padding:6px 14px;
+}
+.case-card .tag.ph{background:var(--teal-soft);color:var(--teal)}
+.case-card .tag.au{background:var(--tint2);color:var(--blue)}
+.case-card .tag .ico{width:14px;height:14px}
+.case-card h3{font-size:19px;font-weight:900;margin-bottom:8px;line-height:1.6}
+.case-card p{font-size:14px;color:var(--ink-soft)}
+.case-card .big{font-family:var(--mono);font-size:30px;color:var(--blue);margin:8px 0 4px}
+.case-card .big small{font-size:12px;color:var(--ink-soft);letter-spacing:.08em}
+.case-note{font-size:11.5px;color:var(--ink-soft);margin-top:18px}
+
+/* ---- CTAバナー ---- */
+.cta-banner{padding:0 0 100px;background:var(--tint)}
+.cta-banner .inner{
+  background:var(--grad);
+  border-radius:26px;color:#fff;padding:54px 58px;position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:space-between;gap:36px;flex-wrap:wrap;
+  box-shadow:0 28px 60px rgba(46,107,214,.28);
+}
+@media(max-width:760px){.cta-banner .inner{padding:38px 30px}}
+.cta-banner .inner::before,.cta-banner .inner::after{
+  content:'';position:absolute;border-radius:50%;background:rgba(255,255,255,.1);pointer-events:none;
+}
+.cta-banner .inner::before{width:300px;height:300px;right:-80px;top:-120px}
+.cta-banner .inner::after{width:180px;height:180px;right:140px;bottom:-90px}
+.cta-banner h3{font-size:clamp(20px,2.7vw,28px);font-weight:900;line-height:1.65;margin-bottom:8px}
+.cta-banner p{font-size:13.5px;color:rgba(255,255,255,.88)}
+.cta-banner .btns{display:flex;gap:14px;flex-wrap:wrap;position:relative;z-index:2}
+.btn-white{background:#fff;color:var(--blue);box-shadow:0 8px 22px rgba(0,0,0,.15)}
+.btn-outline-w{border:2px solid rgba(255,255,255,.8);color:#fff}
+
+/* ---- ⑦ FAQ ---- */
+.faq details{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:12px;overflow:hidden;transition:box-shadow .2s}
+.faq details[open]{box-shadow:0 12px 28px rgba(31,51,80,.08)}
+.faq summary{cursor:pointer;padding:21px 26px;font-weight:700;font-size:15px;list-style:none;display:flex;align-items:center;gap:14px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary .q{
+  font-family:var(--mono);font-size:11px;color:#fff;border-radius:8px;padding:4px 10px;flex:none;
+  background:var(--blue);
+}
+.faq summary::after{content:'+';font-family:var(--mono);color:var(--blue);font-size:20px;margin-left:auto;flex:none;transition:transform .25s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq .a{padding:0 26px 22px 80px;font-size:14px;color:var(--ink-soft)}
+@media(max-width:600px){.faq .a{padding-left:26px}}
+
+/* ---- ⑧ クロージング ---- */
+.closing{
+  background:var(--grad);
+  text-align:center;padding:120px 0;overflow:hidden;
+}
+.closing::before{
+  content:'';position:absolute;left:50%;top:-180px;transform:translateX(-50%);
+  width:640px;height:640px;border-radius:50%;background:rgba(255,255,255,.08);pointer-events:none;
+}
+.closing h2{font-size:clamp(27px,4vw,42px);color:#fff;position:relative;z-index:2}
+.closing h2 .u{background:linear-gradient(transparent 70%,rgba(255,255,255,.35) 70%)}
+.closing .trail{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.45);color:#fff;box-shadow:none;position:relative;z-index:2}
+.closing .sub{color:rgba(255,255,255,.92);max-width:560px;margin:0 auto 42px;position:relative;z-index:2}
+.form-mock{
+  max-width:540px;margin:0 auto 36px;background:#fff;border:1px solid var(--line);
+  border-radius:20px;padding:34px;text-align:left;box-shadow:0 30px 66px rgba(15,40,90,.3);
+  position:relative;z-index:2;
+}
+.form-mock label{font-size:12.5px;font-weight:700;display:block;margin-bottom:6px;color:var(--ink)}
+.form-mock .field{background:var(--tint);border:1px solid var(--line);border-radius:10px;height:46px;margin-bottom:16px}
+.form-mock .field.ta{height:auto;padding:11px 14px;font-size:13px;color:var(--ink-soft)}
+.closing .sub-link{display:block;margin-top:20px;color:#fff;font-size:13.5px;text-decoration:underline;position:relative;z-index:2}
+.closing .btn{position:relative;z-index:2}
+
+/* ---- ⑨ リソース ---- */
+.webinar-box{
+  background:#fff;border:1px solid var(--line);border-radius:22px;padding:46px 48px;
+  display:grid;grid-template-columns:1.2fr .8fr;gap:46px;align-items:center;
+  box-shadow:0 18px 46px rgba(31,51,80,.07);
+}
+@media(max-width:880px){.webinar-box{grid-template-columns:1fr;padding:32px 26px}}
+.webinar-box h3{font-size:23px;font-weight:900;margin-bottom:14px;line-height:1.6;display:flex;align-items:center;gap:12px}
+.webinar-box h3 .ico{color:var(--coral)}
+.webinar-box p{font-size:14.5px;color:var(--ink-soft);margin-bottom:14px}
+.tokuten{background:var(--teal-soft);padding:16px 20px;font-size:13.5px;border-radius:12px}
+.tokuten b{color:var(--teal)}
+.event-mock{border:1.5px dashed var(--sky);border-radius:16px;padding:24px;background:var(--tint)}
+.event-mock .em-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--ink-soft);margin-bottom:14px}
+.event-item{border-bottom:1px solid var(--line);padding:13px 0;font-size:13.5px;display:flex;gap:11px;align-items:flex-start}
+.event-item .ico{width:16px;height:16px;color:var(--blue);margin-top:5px}
+.event-item .date{font-family:var(--mono);font-size:11.5px;color:var(--blue);display:block}
+
+/* ---- モバイル固定CTA ---- */
+.sticky-cta{
+  position:fixed;left:0;right:0;bottom:0;z-index:80;display:none;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(10px);
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+  border-top:1px solid var(--line);box-shadow:0 -8px 24px rgba(31,51,80,.08);
+}
+.sticky-cta .btn{width:100%;justify-content:center;padding:15px}
+@media(max-width:760px){.sticky-cta{display:block}}
+
+footer{padding:36px 0 110px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.08em;border-top:1px solid var(--line)}
+@media(min-width:761px){footer{padding-bottom:36px}}
+.foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+</style>
+</head>
+<body>
+
+<!-- SVGアイコン定義 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M10 12h5M10 16h5"/></symbol>
+    <symbol id="i-flow" viewBox="0 0 24 24"><rect x="3" y="4" width="6" height="5" rx="1"/><rect x="15" y="15" width="6" height="5" rx="1"/><path d="M9 6.5h5a2 2 0 012 2v4"/><path d="M14 12.5l2 2 2-2" transform="translate(0 .5)"/></symbol>
+    <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="2.6"/><path d="M5 6v12c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6V6"/><path d="M5 12c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 4l1.8 4.7L18.5 10l-4.7 1.8L12 16.5l-1.8-4.7L5.5 10l4.7-1.3z"/><path d="M18.5 15.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4l9 15.5H3z"/><path d="M12 10v4.5M12 17.5v.3"/></symbol>
+    <symbol id="i-yen" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9 7.5l3 4.5 3-4.5M12 12v5M9.5 13.5h5M9.5 15.8h5"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M9.5 14.5l5-5"/><path d="M11 7.5l1.8-1.8a3.5 3.5 0 015 5L16 12.5"/><path d="M13 16.5l-1.8 1.8a3.5 3.5 0 01-5-5L8 11.5"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M10 9l5 3-5 3z"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M15 15l5 5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></symbol>
+    <symbol id="i-dl" viewBox="0 0 24 24"><path d="M12 4v10M8 10.5l4 4 4-4"/><path d="M5 19h14"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c-2.6 2.4-4 5.2-4 8.5s1.4 6.1 4 8.5c2.6-2.4 4-5.2 4-8.5s-1.4-6.1-4-8.5z"/></symbol>
+    <symbol id="i-factory" viewBox="0 0 24 24"><path d="M4 20V9l5 3V9l5 3V9l6 3.5V20z"/><path d="M8.5 16.5h2M13.5 16.5h2"/></symbol>
+    <symbol id="i-pill" viewBox="0 0 24 24"><rect x="3.5" y="9" width="17" height="7" rx="3.5" transform="rotate(-30 12 12.5)"/><path d="M9.5 8.2l4.5 7.8"/></symbol>
+  </defs>
+</svg>
+
+<header>
+  <div class="wrap nav">
+    <div class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></span><b>CARA</b> Platform <span style="font-size:11px;color:var(--ink-soft)">| JAPAN</span></div>
+    <nav class="nav-links">
+      <a href="#about">CARAとは</a>
+      <a href="#reasons">選ばれる理由</a>
+      <a href="#demo">実演イメージ</a>
+      <a href="#cases">導入事例</a>
+      <a href="#faq">FAQ</a>
+      <a href="#webinar">ウェビナー・資料</a>
+    </nav>
+    <a class="btn btn-coral nav-cta" href="#contact"><svg class="ico"><use href="#i-dl"/></svg>資料ダウンロード</a>
+  </div>
+</header>
+
+<!-- ① ヒーロー -->
+<section class="hero" style="padding-bottom:0">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="hero-eyebrow"><svg class="ico"><use href="#i-shield"/></svg>製薬・製造など規制業界に特化</div>
+      <h1>薬事・品質・監査の<br><span class="blue">AI活用</span>は、グローバルでは<br>もう<span class="marker">"あたりまえ"</span>。</h1>
+      <p class="hero-sub">文書・データ・業務プロセスをひとつの基盤で管理し、AIの出力まで監査証跡を残せる。規制業界特化プラットフォーム「CARA」。</p>
+      <div class="hero-ctas">
+        <a class="btn btn-coral btn-lg" href="#contact"><svg class="ico"><use href="#i-dl"/></svg>製品資料を無料ダウンロード</a>
+        <a class="btn btn-ghost" href="#contact"><svg class="ico"><use href="#i-play"/></svg>無料デモを依頼</a>
+      </div>
+      <div class="trustbar">
+        <span class="chip"><svg class="ico"><use href="#i-shield"/></svg>ISO/IEC 27001</span>
+        <span class="chip"><svg class="ico"><use href="#i-check"/></svg>21 CFR Part 11 / GxP / GDPR</span>
+      </div>
+    </div>
+
+    <!-- ヒーローイラスト -->
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 560 470" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- 背景ブロブ -->
+        <ellipse cx="290" cy="250" rx="250" ry="205" fill="#EAF3FB"/>
+        <ellipse cx="300" cy="255" rx="212" ry="172" fill="#DDF3EF" opacity=".55"/>
+        <!-- 工場シルエット -->
+        <path d="M60 330v-52l34 20v-20l34 20v-20l40 23v29z" fill="#BBD6F5" opacity=".7"/>
+        <rect x="76" y="306" width="10" height="9" rx="1.5" fill="#fff"/>
+        <rect x="110" y="306" width="10" height="9" rx="1.5" fill="#fff"/>
+        <!-- 大きな文書パネル -->
+        <g class="float">
+          <rect x="180" y="86" width="212" height="272" rx="18" fill="#fff" stroke="#E3EBF4" stroke-width="2"/>
+          <rect x="204" y="116" width="118" height="13" rx="6.5" fill="#2E6BD6" opacity=".85"/>
+          <rect x="204" y="142" width="164" height="9" rx="4.5" fill="#E3EBF4"/>
+          <rect x="204" y="160" width="146" height="9" rx="4.5" fill="#E3EBF4"/>
+          <rect x="204" y="178" width="164" height="9" rx="4.5" fill="#E3EBF4"/>
+          <!-- AIブロック -->
+          <rect x="204" y="202" width="164" height="66" rx="10" fill="#EAF3FB" stroke="#2E6BD6" stroke-width="1.6" stroke-dasharray="4 4"/>
+          <circle cx="222" cy="221" r="7" fill="#2E6BD6"/>
+          <path d="M219.5 221l2 2 3.5-3.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="236" y="216" width="76" height="8" rx="4" fill="#BBD6F5"/>
+          <rect x="216" y="236" width="140" height="7" rx="3.5" fill="#BBD6F5"/>
+          <rect x="216" y="250" width="108" height="7" rx="3.5" fill="#BBD6F5"/>
+          <!-- 署名行 -->
+          <rect x="204" y="288" width="92" height="9" rx="4.5" fill="#E3EBF4"/>
+          <path d="M206 322c10-10 16 6 26-4s14 6 24-2" stroke="#1F3350" stroke-width="2" stroke-linecap="round"/>
+        </g>
+        <!-- 承認バッジ -->
+        <g class="float d1">
+          <circle cx="398" cy="120" r="44" fill="#1FA48E"/>
+          <circle cx="398" cy="120" r="44" stroke="#fff" stroke-width="4"/>
+          <path d="M380 121l12 12 24-26" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <!-- 証跡タグ -->
+        <g class="float d2">
+          <rect x="356" y="292" width="168" height="52" rx="12" fill="#fff" stroke="#E3EBF4" stroke-width="2"/>
+          <circle cx="382" cy="318" r="11" fill="#EAF3FB"/>
+          <path d="M377 318l3.5 3.5 6-6.5" stroke="#2E6BD6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="402" y="306" width="96" height="8" rx="4" fill="#2E6BD6" opacity=".8"/>
+          <rect x="402" y="322" width="70" height="7" rx="3.5" fill="#E3EBF4"/>
+        </g>
+        <!-- 人物1(白衣・タブレット) -->
+        <g>
+          <ellipse cx="132" cy="428" rx="70" ry="12" fill="#1F3350" opacity=".07"/>
+          <path d="M104 420c0-52 8-92 30-92s30 40 30 92z" fill="#fff" stroke="#E3EBF4" stroke-width="2"/>
+          <path d="M120 340l-20 34c-3 6 3 12 9 9l17-9" fill="#fff" stroke="#E3EBF4" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M148 340l22 30c4 6-2 13-8 10l-20-10" fill="#fff" stroke="#E3EBF4" stroke-width="2" stroke-linejoin="round"/>
+          <rect x="118" y="368" width="34" height="24" rx="4" fill="#2E6BD6"/>
+          <rect x="122" y="373" width="26" height="4" rx="2" fill="#fff" opacity=".8"/>
+          <rect x="122" y="381" width="18" height="4" rx="2" fill="#fff" opacity=".5"/>
+          <circle cx="134" cy="306" r="17" fill="#F4C9A3"/>
+          <path d="M117 302c2-12 12-17 19-16 9 1 14 8 14 16 0 3-1 5-2 7-1-7-5-9-9-9h-15c-3 0-6 1-7 2z" fill="#1F3350"/>
+        </g>
+        <!-- 人物2(スーツ・指差し) -->
+        <g>
+          <ellipse cx="472" cy="428" rx="62" ry="11" fill="#1F3350" opacity=".07"/>
+          <path d="M448 420c0-48 7-86 27-86s27 38 27 86z" fill="#2E6BD6"/>
+          <path d="M462 342l-26-40c-4-6 2-13 8-10l24 22" fill="#2E6BD6"/>
+          <circle cx="440" cy="296" r="7" fill="#F4C9A3"/>
+          <path d="M488 342l16 36c3 6-4 12-9 8l-16-16" fill="#2E6BD6"/>
+          <circle cx="475" cy="308" r="16" fill="#F4C9A3"/>
+          <path d="M459 306c1-11 9-17 17-16 8 1 13 8 13 15 0 2 0 4-1 6-1-6-4-8-8-8h-14c-3 0-6 1-7 3z" fill="#5B4632"/>
+        </g>
+        <!-- 分子 -->
+        <g stroke="#1FA48E" stroke-width="2" opacity=".8" class="float d2">
+          <circle cx="86" cy="150" r="9" fill="#DDF3EF"/>
+          <circle cx="120" cy="122" r="7" fill="#DDF3EF"/>
+          <circle cx="118" cy="176" r="6" fill="#DDF3EF"/>
+          <path d="M93 143l20-15M92 156l20 15"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 統計帯 -->
+  <div class="stats">
+    <div class="wrap stats-grid">
+      <div class="stat reveal"><div class="num"><span data-count="750000">0</span><em>+</em></div><div class="lbl">世界の利用ユーザー数</div></div>
+      <div class="stat reveal"><div class="num"><span data-count="40">0</span><em>+</em></div><div class="lbl">利用されている国数</div></div>
+      <div class="stat reveal"><div class="num"><span data-count="400000">0</span><em>+</em></div><div class="lbl">最大導入規模(ユーザー)</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ② 課題 -->
+<section class="pain">
+  <div class="wrap">
+    <span class="trail reveal"><svg class="ico"><use href="#i-alert"/></svg>PAIN POINTS</span>
+    <h2 class="reveal">こんなお悩みは<span class="u">ありませんか?</span></h2>
+    <div class="pain-list">
+      <div class="pain-item reveal"><span class="p-ico c1"><svg class="ico"><use href="#i-factory"/></svg></span><span>自動車・化学・製薬・医療機器など製造業で、<b>薬事・品質保証・監査・法規対応</b>の業務負荷が年々増えている</span></div>
+      <div class="pain-item reveal"><span class="p-ico c2"><svg class="ico"><use href="#i-alert"/></svg></span><span>AIを業務に使いたいが、<b>生成した文書を監査や査察でどう説明するか</b>が壁になっている</span></div>
+      <div class="pain-item reveal"><span class="p-ico c3"><svg class="ico"><use href="#i-yen"/></svg></span><span>文書管理システムのライセンス費用が、<b>人数×機能×製品ごと</b>に膨らみ続けている</span></div>
+      <div class="pain-item reveal"><span class="p-ico c4"><svg class="ico"><use href="#i-link"/></svg></span><span>既存システムを捨てられず、<b>DXが「検討止まり」</b>になっている</span></div>
+    </div>
+    <p class="bridge reveal">その課題、世界の規制業界では<span class="em">すでに解決が進んでいます</span>。</p>
+  </div>
+</section>
+
+<!-- ③ CARAとは -->
+<section id="about">
+  <div class="wrap">
+    <span class="trail reveal"><svg class="ico"><use href="#i-doc"/></svg>WHAT IS CARA</span>
+    <h2 class="reveal">CARAとは — 規制業界のために<br>生まれた次世代プラットフォーム</h2>
+    <div class="about-grid">
+      <div class="about-copy reveal">
+        <p>CARAは、高度なコンプライアンスが求められる業界のために設計された、<b>文書・データ・業務プロセスの統合管理プラットフォーム</b>です。</p>
+        <p>単なる文書管理システムではありません。文書の作成からレビュー・承認・改訂までを電子ワークフローで一元管理し、<b>「誰が・いつ・何をしたか」をすべての操作で自動記録</b>。規制要件に標準対応した基盤の上で、AIによる業務効率化までを実現します。</p>
+        <p>Documentumをはじめとするレガシー文書管理システムの後継として、世界の大手製薬・化学・自動車メーカーに採用が広がっています。</p>
+        <ul class="scene">
+          <li><svg class="ico"><use href="#i-check"/></svg>SOPや規制文書の作成〜承認〜改訂を電子ワークフローで管理</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>全操作の監査証跡が自動で残り、査察・顧客監査にそのまま対応</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>AIが監査照会対応のドラフト生成や文書レビューを支援</li>
+        </ul>
+      </div>
+      <div class="diagram reveal">
+        <div class="d-nodes">
+          <div class="d-node"><svg class="ico"><use href="#i-doc"/></svg>文書管理<small>作成・改訂・版管理</small></div>
+          <div class="d-node"><svg class="ico"><use href="#i-flow"/></svg>ワークフロー<small>レビュー・承認</small></div>
+          <div class="d-node"><svg class="ico"><use href="#i-db"/></svg>データ管理<small>メタデータ・検索</small></div>
+          <div class="d-node"><svg class="ico"><use href="#i-spark"/></svg>AI<small>生成・レビュー支援</small></div>
+        </div>
+        <div class="d-core">CARA<small>統合プラットフォーム</small></div>
+        <div class="d-base">監査証跡 × セキュリティ × コンプライアンス<small>21 CFR Part 11 / GxP / GDPR 標準対応</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ④ 3つの理由 -->
+<section class="reasons" id="reasons">
+  <div class="wrap">
+    <span class="trail reveal"><svg class="ico"><use href="#i-shield"/></svg>WHY CARA</span>
+    <h2 class="reveal">CARAが選ばれる、<span class="u">3つの理由</span></h2>
+    <div class="reason-list">
+      <div class="reason feat reveal">
+        <span class="no">REASON 01</span>
+        <div class="r-art">
+          <svg viewBox="0 0 140 110" fill="none">
+            <rect x="30" y="12" width="66" height="86" rx="8" fill="#fff" stroke="#E3EBF4" stroke-width="2"/>
+            <rect x="40" y="24" width="34" height="6" rx="3" fill="#2E6BD6" opacity=".8"/>
+            <rect x="40" y="37" width="46" height="5" rx="2.5" fill="#E3EBF4"/>
+            <rect x="40" y="48" width="46" height="5" rx="2.5" fill="#E3EBF4"/>
+            <rect x="40" y="61" width="46" height="18" rx="5" fill="#EAF3FB" stroke="#2E6BD6" stroke-width="1.4" stroke-dasharray="3 3"/>
+            <circle cx="104" cy="76" r="24" fill="#1FA48E"/>
+            <circle cx="104" cy="76" r="24" stroke="#fff" stroke-width="3.5"/>
+            <path d="M94 77l7 7 13-15" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="26" cy="70" r="3.5" fill="#1FA48E" opacity=".5"/>
+            <circle cx="118" cy="22" r="4.5" fill="#BBD6F5"/>
+          </svg>
+        </div>
+        <h3>AIが生成した文書にも、完全な監査証跡</h3>
+        <p>「どのAIが・どの入力から・いつ出力したか」「誰が確認・承認したか」までを自動記録。AI生成コンテンツのエビデンスをそのまま監査・査察に提出できます。</p>
+        <span class="kicker">規制業界でAIを"安心して"使える — CARA最大の差別化ポイント</span>
+      </div>
+      <div class="reason reveal">
+        <span class="no">REASON 02</span>
+        <div class="r-art">
+          <svg viewBox="0 0 140 110" fill="none">
+            <circle cx="70" cy="52" r="34" fill="#EAF3FB"/>
+            <circle cx="70" cy="52" r="34" stroke="#2E6BD6" stroke-width="2.5"/>
+            <path d="M59 40l11 15 11-15M70 55v18M61 61h18M61 69h18" stroke="#2E6BD6" stroke-width="3" stroke-linecap="round"/>
+            <rect x="18" y="82" width="30" height="9" rx="4.5" fill="#DDF3EF"/>
+            <rect x="55" y="88" width="30" height="9" rx="4.5" fill="#BBD6F5"/>
+            <rect x="92" y="82" width="30" height="9" rx="4.5" fill="#DDF3EF"/>
+            <path d="M112 26l4-8 4 8-4-2z" fill="#1FA48E"/>
+          </svg>
+        </div>
+        <h3>1ユーザー1ライセンス。<br>それだけ。</h3>
+        <p>機能・モジュールごとの追加課金なし。全機能がひとつのライセンスに含まれるから、利用が広がってもコストが読める。複数製品併用と比べ費用を大幅に抑制します。</p>
+      </div>
+      <div class="reason reveal">
+        <span class="no">REASON 03</span>
+        <div class="r-art">
+          <svg viewBox="0 0 140 110" fill="none">
+            <rect x="14" y="34" width="44" height="44" rx="9" fill="#fff" stroke="#E3EBF4" stroke-width="2"/>
+            <rect x="24" y="46" width="24" height="5" rx="2.5" fill="#E3EBF4"/>
+            <rect x="24" y="57" width="24" height="5" rx="2.5" fill="#E3EBF4"/>
+            <rect x="82" y="34" width="44" height="44" rx="9" fill="#2E6BD6"/>
+            <rect x="92" y="46" width="24" height="5" rx="2.5" fill="#fff" opacity=".8"/>
+            <rect x="92" y="57" width="24" height="5" rx="2.5" fill="#fff" opacity=".5"/>
+            <path d="M58 50h24M58 62h24" stroke="#1FA48E" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 7"/>
+            <circle cx="70" cy="56" r="12" fill="#DDF3EF" stroke="#1FA48E" stroke-width="2.5"/>
+            <path d="M65.5 56l3 3 6-6.5" stroke="#1FA48E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>既存システムを、<br>捨てなくていい。</h3>
+        <p>SharePointや基幹システムなど既存資産と連携しながら、効果の大きい業務から段階的に導入。「置き換える」のではなく「共存しながら前進する」アプローチです。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑤ 実演イメージ -->
+<section id="demo">
+  <div class="wrap">
+    <span class="trail reveal"><svg class="ico"><use href="#i-play"/></svg>LIVE DEMO IMAGE</span>
+    <h2 class="reveal">CARAのAIが返すアウトプットを、<br>ご覧ください</h2>
+    <p class="lead reveal">「自社で使ったらどうなるか」——ウェビナーで最も反響の大きい3つの実演シーンです。</p>
+    <div class="demo-cards">
+      <div class="demo-card reveal">
+        <div class="ui-mock"><div class="ui-win">
+          <div class="ui-bar"><i></i><i></i><i></i></div>
+          <div class="ui-body">
+            <div class="ui-line w60"></div><div class="ui-line w80"></div>
+            <div class="ui-ai"><span class="tag-ai"><svg class="ico"><use href="#i-spark"/></svg>CARA AI DRAFT</span><div class="ui-line"></div><div class="ui-line w80"></div><div class="ui-line w60"></div></div>
+            <div class="ui-verified"><span><svg class="ico"><use href="#i-check"/></svg>TRAIL RECORDED</span></div>
+          </div>
+        </div></div>
+        <div class="demo-body">
+          <h3><svg class="ico"><use href="#i-doc"/></svg>監査照会対応のドラフト生成</h3>
+          <p>過去の類似照会と社内文書をもとに、回答ドラフトを数分で生成。担当者はレビューに集中できます。</p>
+        </div>
+      </div>
+      <div class="demo-card reveal">
+        <div class="ui-mock"><div class="ui-win">
+          <div class="ui-bar"><i></i><i></i><i></i></div>
+          <div class="ui-body">
+            <div class="ui-line w80"></div>
+            <div class="ui-ai"><span class="tag-ai"><svg class="ico"><use href="#i-search"/></svg>Q&amp;A — 根拠文書リンク付き</span><div class="ui-line w80"></div><div class="ui-line"></div><div class="ui-line w60"></div></div>
+            <div class="ui-verified"><span><svg class="ico"><use href="#i-check"/></svg>SOURCE CITED</span></div>
+          </div>
+        </div></div>
+        <div class="demo-body">
+          <h3><svg class="ico"><use href="#i-search"/></svg>規制文書へのQ&amp;A</h3>
+          <p>「この変更に必要な申請区分は?」——膨大な規制文書・社内SOPに自然言語で質問し、根拠付きの回答を取得。</p>
+        </div>
+      </div>
+      <div class="demo-card reveal">
+        <div class="ui-mock"><div class="ui-win">
+          <div class="ui-bar"><i></i><i></i><i></i></div>
+          <div class="ui-body">
+            <div class="ui-line w80"></div>
+            <div class="ui-line w60" style="background:#FBD3C4"></div>
+            <div class="ui-ai"><span class="tag-ai"><svg class="ico"><use href="#i-flow"/></svg>DIFF &amp; REVIEW</span><div class="ui-line w60"></div><div class="ui-line w80"></div></div>
+            <div class="ui-verified"><span><svg class="ico"><use href="#i-check"/></svg>AI PRE-REVIEWED</span></div>
+          </div>
+        </div></div>
+        <div class="demo-body">
+          <h3><svg class="ico"><use href="#i-flow"/></svg>文書レビューの自動化</h3>
+          <p>改訂版と旧版の差分検出、記載ゆれ・必須項目のチェックをAIが一次レビュー。確認時間を大幅に短縮します。</p>
+        </div>
+      </div>
+    </div>
+    <div class="mid-cta reveal"><a class="btn btn-primary" href="#contact"><svg class="ico"><use href="#i-play"/></svg>実際の画面をデモで見る</a></div>
+  </div>
+</section>
+
+<!-- ⑥ 導入事例 -->
+<section class="cases" id="cases">
+  <div class="wrap">
+    <span class="trail reveal"><svg class="ico"><use href="#i-globe"/></svg>CUSTOMERS</span>
+    <h2 class="reveal">世界の規制業界が、<br>CARAを<span class="u">選んでいます</span></h2>
+    <p class="lead reveal">グローバル製薬企業から世界トップクラスの自動車メーカーまで。CARAは40か国以上・75万ユーザーに利用されています。</p>
+  </div>
+  <div class="marquee reveal" aria-hidden="true">
+    <div class="marquee-track">
+      <span class="logo-cell">BAYER</span><span class="logo-cell">PFIZER</span><span class="logo-cell">MERCK</span><span class="logo-cell">GLOBAL AUTOMOTIVE TOP 3</span><span class="logo-cell">LIFE SCIENCES</span><span class="logo-cell">CHEMICAL</span><span class="logo-cell">MEDICAL DEVICE</span>
+      <span class="logo-cell">BAYER</span><span class="logo-cell">PFIZER</span><span class="logo-cell">MERCK</span><span class="logo-cell">GLOBAL AUTOMOTIVE TOP 3</span><span class="logo-cell">LIFE SCIENCES</span><span class="logo-cell">CHEMICAL</span><span class="logo-cell">MEDICAL DEVICE</span>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="case-grid">
+      <div class="case-card reveal">
+        <span class="tag ph"><svg class="ico"><use href="#i-pill"/></svg>CASE 01 — PHARMA</span>
+        <h3>グローバル製薬企業</h3>
+        <p>規制文書管理をCARAに統合し、監査対応工数を削減。AI活用による照会対応の迅速化を実現。</p>
+      </div>
+      <div class="case-card reveal">
+        <span class="tag au"><svg class="ico"><use href="#i-factory"/></svg>CASE 02 — AUTOMOTIVE</span>
+        <h3>世界トップ3自動車メーカー</h3>
+        <div class="big">400,000 <small>USERS</small></div>
+        <p>Documentumから移行し、40万ユーザー規模で文書・データ・プロセス管理を刷新。</p>
+      </div>
+    </div>
+    <p class="case-note reveal">※ 事例の詳細は導入事例ページでご紹介しています(実名掲載は本社確認のうえ確定)</p>
+  </div>
+</section>
+
+<!-- CTAバナー -->
+<section class="cta-banner">
+  <div class="wrap">
+    <div class="inner reveal">
+      <div style="position:relative;z-index:2">
+        <h3>貴社の規制業務、CARAならどう変わるか。<br>資料でご確認ください。</h3>
+        <p>業界別(自動車/化学/製薬)の参考資料もご用意しています。</p>
+      </div>
+      <div class="btns">
+        <a class="btn btn-white btn-lg" href="#contact"><svg class="ico"><use href="#i-dl"/></svg>資料ダウンロード</a>
+        <a class="btn btn-outline-w" href="#contact">相談してみる</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑦ FAQ -->
+<section class="faq" id="faq" style="padding-top:0">
+  <div class="wrap" style="max-width:840px">
+    <span class="trail reveal"><svg class="ico"><use href="#i-search"/></svg>FAQ</span>
+    <h2 class="reveal">よくあるご質問</h2>
+    <details class="reveal"><summary><span class="q">Q1</span>料金体系を教えてください</summary><p class="a">1ユーザー1ライセンスのシンプルな体系です。機能・モジュールごとの追加課金はありません。詳細はお問い合わせください。</p></details>
+    <details class="reveal"><summary><span class="q">Q2</span>既存の文書管理システムからの移行は必要ですか?</summary><p class="a">全面移行は不要です。既存システムと連携・共存しながら、段階的に導入いただけます。移行を選択される場合も、専用の移行プロセスでご支援します。</p></details>
+    <details class="reveal"><summary><span class="q">Q3</span>導入までどのくらいかかりますか?</summary><p class="a">導入範囲によりますが、対象業務を絞ったスモールスタートなら短期間での立ち上げが可能です。個別にお見積り・スケジュールをご提示します。</p></details>
+    <details class="reveal"><summary><span class="q">Q4</span>日本語でのサポートはありますか?</summary><p class="a">はい。日本市場向けの体制で、導入から運用まで日本語でご支援します。</p></details>
+  </div>
+</section>
+
+<!-- ⑧ クロージング -->
+<section class="closing" id="contact">
+  <div class="wrap">
+    <span class="trail reveal"><svg class="ico"><use href="#i-doc"/></svg>CONTACT</span>
+    <h2 class="reveal">AIの活用と規制対応を、<br><span class="u">両立させませんか</span>。</h2>
+    <p class="sub reveal">「自社のどの業務に効くのか」「既存システムとどう共存させるか」——まずは資料またはデモで、CARAが貴社にもたらす変化をご確認ください。</p>
+    <div class="form-mock reveal" aria-hidden="true">
+      <label>会社名</label><div class="field"></div>
+      <label>氏名</label><div class="field"></div>
+      <label>メールアドレス</label><div class="field"></div>
+      <label>興味のある内容</label><div class="field ta">資料ダウンロード / デモ / 個別相談</div>
+    </div>
+    <a class="btn btn-coral btn-lg reveal" href="#"><svg class="ico"><use href="#i-dl"/></svg>製品資料を無料ダウンロード</a>
+    <a class="sub-link reveal" href="#">無料デモ・個別相談を申し込む</a>
+  </div>
+</section>
+
+<!-- ⑨ ウェビナー・リソース -->
+<section id="webinar">
+  <div class="wrap">
+    <span class="trail reveal"><svg class="ico"><use href="#i-cal"/></svg>WEBINAR &amp; RESOURCES</span>
+    <h2 class="reveal">まだ情報収集の段階の方へ</h2>
+    <p class="lead reveal">お問い合わせの前に、まずはウェビナーや資料でCARAを知りたい方はこちらから。</p>
+    <div class="webinar-box reveal" style="margin-top:38px">
+      <div>
+        <h3><svg class="ico ico-lg"><use href="#i-play"/></svg>無料ウェビナーで"体感"する</h3>
+        <p>CARAの基本機能と実演デモを1時間で体感いただけるオンラインウェビナーを定期開催しています。質疑応答では「自社の場合どこから始めるべきか」まで、状況に合わせて具体的にお答えします。</p>
+        <div class="tokuten"><b>参加特典:</b> ご希望の方には終了後に無料デモ(個別相談付き)をご案内。業界別の参考資料(自動車/化学/製薬)もお送りします。</div>
+      </div>
+      <div class="event-mock">
+        <div class="em-label">UPCOMING — WIX EVENTS 自動表示</div>
+        <div class="event-item"><svg class="ico"><use href="#i-cal"/></svg><span><span class="date">2026/09/XX (火) 15:00–16:00</span>【製造業×AI】薬事・品質・監査のAI活用とは</span></div>
+        <div class="event-item"><svg class="ico"><use href="#i-cal"/></svg><span><span class="date">2026/10/XX (木) 15:00–16:00</span>実演60分 — CARA AIデモンストレーション</span></div>
+        <div class="event-item"><svg class="ico"><use href="#i-play"/></svg><span><span class="date">ARCHIVE</span>過去回のアーカイブ動画を見る →</span></div>
+      </div>
+    </div>
+    <div class="case-grid reveal" style="margin-top:22px">
+      <div class="case-card">
+        <span class="tag au"><svg class="ico"><use href="#i-doc"/></svg>BLOG — WIX BLOG 自動表示</span>
+        <h3>専門ブログ・解説記事</h3>
+        <p>規制対応・品質管理・AI活用の最新トピックを解説。(最新3件をここに自動表示)</p>
+      </div>
+      <div class="case-card">
+        <span class="tag ph"><svg class="ico"><use href="#i-dl"/></svg>WHITEPAPER — GATED</span>
+        <h3>ホワイトペーパー</h3>
+        <p>「分断されたシステムの隠れたコスト」など、本社発の調査資料を日本語でダウンロード。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <span>© 2026 GENERIS — CARA PLATFORM JAPAN</span>
+    <span>DESIGN MOCKUP v4.0 / 2026-08-16</span>
+  </div>
+</footer>
+
+<!-- モバイル固定CTA -->
+<div class="sticky-cta">
+  <a class="btn btn-coral" href="#contact"><svg class="ico"><use href="#i-dl"/></svg>資料を無料ダウンロード</a>
+</div>
+
+<script>
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}})},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// 数値カウントアップ
+const nums=document.querySelectorAll('[data-count]');
+function animate(el){
+  const target=+el.dataset.count;const dur=1600;const t0=performance.now();
+  function step(t){
+    const p=Math.min((t-t0)/dur,1);
+    const eased=1-Math.pow(1-p,3);
+    el.textContent=Math.round(target*eased).toLocaleString();
+    if(p<1)requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+if(reduced){nums.forEach(n=>n.textContent=(+n.dataset.count).toLocaleString());}
+else{
+  const numIO=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){animate(e.target);numIO.unobserve(e.target)}})},{threshold:.5});
+  nums.forEach(n=>numIO.observe(n));
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+---
+/**
+ * Cover.astro — CSSで描画するPDF表紙。
+ * mocks/CARA_whitepaper_list_mock.html / _detail_mock.html の .cover を移植。
+ * 画像を用意しなくても資料ごとの表紙が出せる。
+ *
+ * size='lg' … 詳細ヒーロー / 一覧のフィーチャー枠(傾きと影あり)
+ * size='sm' … 一覧カード内(幅100%・傾きなし・枠線)
+ */
+
+interface Props {
+  label: string;
+  /** 1要素 = 1行 */
+  title: string[];
+  sub: string;
+  variant?: 'light' | 'blue' | 'teal';
+  /** variant='light' のときの差し色(帯・ロゴ・装飾円) */
+  accent?: 'blue' | 'teal' | 'coral';
+  size?: 'lg' | 'sm';
+  /** 詳細ヒーロー用の一回り大きい表紙 */
+  hero?: boolean;
+  class?: string;
+}
+
+const { label, title, sub, variant = 'light', accent, size = 'lg', hero = false, class: className } = Astro.props;
+
+const VARIANT_CLASS = { light: '', blue: 'v2', teal: 'v3' } as const;
+---
+
+<div
+  class:list={[
+    'cover',
+    VARIANT_CLASS[variant],
+    { sm: size === 'sm', hero },
+    accent && variant === 'light' ? `a-${accent}` : null,
+    className,
+  ]}
+  aria-hidden="true"
+>
+  <div class="c-band"></div>
+  <div class="c-logo">{label}</div>
+  <div class="c-title">
+    {title.map((t, i) => (
+      <Fragment>
+        {i > 0 && <br />}
+        {t}
+      </Fragment>
+    ))}
+  </div>
+  <div class="c-sub">{sub}</div>
+  <div class="c-deco"></div>
+</div>

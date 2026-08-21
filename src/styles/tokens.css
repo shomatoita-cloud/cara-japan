@@ -1,0 +1,60 @@
+/* ============================================================
+   tokens.css — デザイントークン(mocks/ の :root と完全一致)
+   色・角丸・影はここのCSS変数のみを使用すること。
+   ハードコードで色を書かない。
+   ============================================================ */
+
+:root{
+  color-scheme:light only;
+  --bg:#FFFFFF;
+  --tint:#F8FBFE;
+  --tint2:#F0F6FD;
+  --ink:#1F3350;
+  --ink-soft:#42536C;
+  --blue:#2E6BD6;
+  --blue-deep:#1F4FA8;
+  --sky:#C7DDF7;
+  --teal:#1FA48E;
+  --teal-soft:#EAF9F5;
+  --coral:#F0653F;
+  --line:#E9F0F8;
+  --grad:linear-gradient(118deg,#1F4FA8 0%,#2E6BD6 48%,#3F9BE8 100%);
+  --grad-soft:linear-gradient(118deg,#2E6BD6,#3F9BE8);
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'Noto Sans JP',sans-serif;
+}
+
+/* ------------------------------------------------------------
+   グローバルリセット / ベース(mocks/CARA_TOP_design_mock.html 由来)
+   ------------------------------------------------------------ */
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;background:#FFFFFF}
+body{
+  font-family:var(--sans);
+  background:var(--bg) !important;
+  color:var(--ink);
+  line-height:1.9;
+  font-size:16px;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+section{background:var(--bg)}
+img{max-width:100%}
+a{color:var(--blue);text-decoration:none}
+
+/* アイコン(SVG共通) */
+.ico{width:22px;height:22px;stroke:currentColor;stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ico-lg{width:30px;height:30px}
+
+/* レイアウト共通 */
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+/* スクロール出現アニメーション(素のJSで .on を付与) */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
+.reveal.on{opacity:1;transform:none}
+
+@media(prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  *{animation:none!important;transition:none!important}
+}

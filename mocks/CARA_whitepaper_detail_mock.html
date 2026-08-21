@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
+<title>分断されたシステムの隠れたコスト | 資料ダウンロード | CARA Platform 日本版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light only;
+  --bg:#FFFFFF;
+  --tint:#F8FBFE;
+  --tint2:#F0F6FD;
+  --ink:#1F3350;
+  --ink-soft:#42536C;
+  --blue:#2E6BD6;
+  --blue-deep:#1F4FA8;
+  --sky:#C7DDF7;
+  --teal:#1FA48E;
+  --teal-soft:#EAF9F5;
+  --coral:#F0653F;
+  --line:#E9F0F8;
+  --grad:linear-gradient(118deg,#1F4FA8 0%,#2E6BD6 48%,#3F9BE8 100%);
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'Noto Sans JP',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;background:#FFFFFF}
+body{font-family:var(--sans);background:var(--bg) !important;color:var(--ink);line-height:1.95;font-size:15.5px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--blue);text-decoration:none}
+.ico{width:20px;height:20px;stroke:currentColor;stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+.reveal.on{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}*{animation:none!important;transition:none!important}}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;font-weight:700;font-size:15px;
+  padding:16px 30px;border-radius:999px;letter-spacing:.03em;
+  transition:transform .18s,box-shadow .18s;
+}
+.btn .ico{width:16px;height:16px}
+.btn:hover{transform:translateY(-3px)}
+.btn-primary{background:var(--blue);color:#fff;box-shadow:0 8px 22px rgba(46,107,214,.3)}
+.btn-coral{background:var(--coral);color:#fff;box-shadow:0 8px 22px rgba(240,101,63,.32)}
+.btn-lg{padding:18px 36px;font-size:16px}
+
+header{position:sticky;top:0;z-index:90;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+.logo{font-family:var(--mono);font-weight:500;font-size:18px;letter-spacing:.06em;display:flex;align-items:center;gap:10px}
+.logo b{color:var(--blue)}
+.logo-mark{width:28px;height:28px;border-radius:9px;background:linear-gradient(135deg,var(--blue),var(--teal));display:flex;align-items:center;justify-content:center}
+.logo-mark svg{width:15px;height:15px;stroke:#fff}
+.nav-links{display:flex;gap:24px;font-size:13.5px;font-weight:700}
+.nav-links a{color:var(--ink-soft)}
+.nav-links a.on{color:var(--blue)}
+.nav-cta{font-size:13.5px;padding:11px 22px}
+@media(max-width:980px){.nav-links{display:none}}
+
+.crumbs{background:var(--tint);padding:13px 0;font-size:12.5px;color:var(--ink-soft)}
+.crumbs a{color:var(--ink-soft)}
+.crumbs b{color:var(--blue)}
+
+/* ---- ヒーロー ---- */
+.wp-hero{background:var(--grad);color:#fff;padding:56px 0 120px;position:relative;overflow:hidden}
+.wp-hero::before{content:'';position:absolute;right:-120px;top:-150px;width:420px;height:420px;border-radius:50%;background:rgba(255,255,255,.09)}
+.wp-hero::after{content:'';position:absolute;left:-90px;bottom:-140px;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,.07)}
+.wp-hero .grid{display:grid;grid-template-columns:1fr 250px;gap:48px;align-items:center;position:relative;z-index:2}
+@media(max-width:820px){.wp-hero .grid{grid-template-columns:1fr}}
+.doc-tag{
+  display:inline-flex;align-items:center;gap:6px;width:fit-content;
+  font-size:11.5px;font-weight:900;letter-spacing:.08em;border-radius:999px;padding:6px 15px;margin-bottom:16px;
+  background:#fff;color:var(--teal);
+}
+.wp-hero h1{font-weight:900;font-size:clamp(24px,3.4vw,35px);line-height:1.58;margin-bottom:14px}
+.wp-hero .sub{color:rgba(255,255,255,.92);font-size:15px;max-width:560px;margin-bottom:20px}
+.doc-meta{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;font-weight:700}
+.doc-meta span{display:inline-flex;align-items:center;gap:6px}
+.doc-meta .ico{width:15px;height:15px}
+
+/* 表紙 */
+.cover{
+  width:230px;aspect-ratio:1/1.38;border-radius:10px;position:relative;overflow:hidden;
+  box-shadow:0 30px 60px rgba(8,25,60,.45);
+  background:linear-gradient(160deg,#1F4FA8,#2E6BD6);display:flex;flex-direction:column;padding:24px 22px;
+  transform:rotate(2deg);margin:0 auto;
+}
+.cover .c-band{height:6px;border-radius:99px;margin-bottom:16px;background:#fff;opacity:.9}
+.cover .c-logo{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:#fff;margin-bottom:auto}
+.cover .c-title{font-weight:900;font-size:16px;line-height:1.6;margin-bottom:10px;color:#fff}
+.cover .c-sub{font-size:10px;color:rgba(255,255,255,.78);line-height:1.7}
+.cover .c-deco{position:absolute;right:-30px;bottom:-30px;width:110px;height:110px;border-radius:50%;background:#fff;opacity:.12}
+
+/* ---- 2カラム ---- */
+.layout{display:grid;grid-template-columns:1fr 340px;gap:36px;align-items:start;margin-top:-64px;position:relative;z-index:5;padding-bottom:90px}
+@media(max-width:920px){.layout{grid-template-columns:1fr}}
+.main-col{min-width:0}
+
+.block{
+  background:#fff;border:1px solid var(--line);border-radius:20px;padding:34px 36px;
+  margin-bottom:22px;box-shadow:0 8px 24px rgba(31,51,80,.05);
+}
+@media(max-width:600px){.block{padding:26px 22px}}
+.block h2{
+  font-weight:900;font-size:20px;line-height:1.6;margin-bottom:18px;
+  display:flex;align-items:center;gap:11px;
+}
+.block h2 .b-ico{
+  width:38px;height:38px;border-radius:11px;background:var(--tint2);color:var(--blue);
+  display:flex;align-items:center;justify-content:center;flex:none;
+}
+.block h2 .b-ico .ico{width:19px;height:19px}
+.block p{color:var(--ink-soft);font-size:14.5px;margin-bottom:14px}
+.block p:last-child{margin-bottom:0}
+.block p b{color:var(--ink)}
+
+/* キーナンバー */
+.key-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:6px}
+@media(max-width:640px){.key-stats{grid-template-columns:1fr}}
+.ks{background:var(--tint);border-radius:14px;padding:20px 16px;text-align:center}
+.ks b{font-family:var(--mono);font-weight:500;font-size:28px;color:var(--blue);display:block;line-height:1.3}
+.ks span{font-size:12px;color:var(--ink-soft);font-weight:700;line-height:1.6;display:block}
+
+/* わかることリスト */
+.learn-list li{
+  list-style:none;display:flex;gap:12px;padding:12px 16px;margin-bottom:9px;
+  font-size:14px;background:var(--tint);border-radius:11px;align-items:flex-start;
+}
+.learn-list li .ico{width:18px;height:18px;color:var(--teal);margin-top:6px}
+.learn-list li b{color:var(--blue-deep)}
+
+/* 目次 */
+.toc{counter-reset:toc}
+.toc li{
+  list-style:none;counter-increment:toc;display:flex;gap:14px;align-items:baseline;
+  padding:13px 4px;border-bottom:1px solid var(--line);font-size:14px;font-weight:700;
+}
+.toc li:last-child{border-bottom:none}
+.toc li::before{
+  content:"0" counter(toc);font-family:var(--mono);font-weight:500;font-size:13px;
+  color:var(--blue);flex:none;
+}
+.toc li small{display:block;font-weight:400;font-size:12.5px;color:var(--ink-soft)}
+
+/* こんな方に */
+.rec-list li{
+  list-style:none;display:flex;gap:12px;padding:11px 15px;margin-bottom:9px;
+  font-size:14px;background:var(--tint);border-radius:11px;align-items:flex-start;
+}
+.rec-list li .ico{width:18px;height:18px;color:var(--teal);margin-top:6px}
+
+/* 資料概要テーブル */
+.spec{width:100%;border-collapse:collapse;font-size:14px}
+.spec th{
+  text-align:left;width:120px;padding:12px 14px;background:var(--tint);color:var(--ink);
+  font-weight:900;border-bottom:2px solid #fff;border-radius:8px 0 0 8px;vertical-align:top;font-size:13px;
+}
+.spec td{padding:12px 16px;border-bottom:1px solid var(--line);color:var(--ink-soft)}
+.spec tr:last-child td{border-bottom:none}
+
+/* 関連資料 */
+.rel-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.rel-grid{grid-template-columns:1fr}}
+.rel-card{
+  border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:var(--tint);
+  transition:transform .2s,box-shadow .2s;display:block;
+}
+.rel-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(31,51,80,.1);background:#fff}
+.rel-card .r-tag{font-size:10.5px;font-weight:900;letter-spacing:.08em;color:var(--teal);display:block;margin-bottom:6px}
+.rel-card .r-title{font-size:13.5px;font-weight:900;color:var(--ink);line-height:1.65}
+
+/* ---- DLフォームカード(サイド固定) ---- */
+.dl-card{
+  position:sticky;top:88px;background:#fff;border:2px solid var(--coral);border-radius:20px;
+  padding:28px 26px;box-shadow:0 24px 56px rgba(15,40,90,.16);
+}
+@media(max-width:920px){.dl-card{position:static;order:-1}}
+.dl-card .dl-head{
+  display:flex;align-items:center;gap:10px;font-weight:900;font-size:16.5px;margin-bottom:6px;
+}
+.dl-card .dl-head .ico{color:var(--coral);width:22px;height:22px}
+.dl-card .dl-sub{font-size:12px;color:var(--ink-soft);margin-bottom:18px;font-weight:500}
+.f-field{margin-bottom:13px}
+.f-field label{display:block;font-size:12px;font-weight:900;margin-bottom:5px}
+.f-field label i{font-style:normal;color:var(--coral);margin-left:3px}
+.f-input{
+  width:100%;height:44px;border:1.5px solid var(--line);border-radius:10px;background:var(--tint);
+  padding:0 13px;font-size:13.5px;color:var(--ink-soft);display:flex;align-items:center;
+}
+.f-consent{
+  display:flex;gap:9px;align-items:flex-start;font-size:11px;color:var(--ink-soft);
+  margin:14px 0 16px;line-height:1.7;
+}
+.f-consent .box{width:16px;height:16px;border:1.5px solid var(--sky);border-radius:4px;background:#fff;flex:none;margin-top:3px}
+.dl-card .btn{width:100%}
+.dl-flow{
+  margin-top:16px;background:var(--teal-soft);border-radius:10px;padding:11px 14px;
+  font-size:11.5px;font-weight:700;color:var(--teal);line-height:1.8;text-align:center;
+}
+.hs-note{
+  margin-top:12px;font-family:var(--mono);font-size:10px;color:var(--ink-soft);
+  letter-spacing:.06em;text-align:center;
+}
+
+/* 下部CTA */
+.bottom-cta{background:var(--grad);color:#fff;text-align:center;padding:80px 0;overflow:hidden;position:relative}
+.bottom-cta::before{content:'';position:absolute;left:50%;top:-150px;transform:translateX(-50%);width:500px;height:500px;border-radius:50%;background:rgba(255,255,255,.08)}
+.bottom-cta h2{font-weight:900;font-size:clamp(23px,3.2vw,32px);line-height:1.6;margin-bottom:10px;position:relative;z-index:2}
+.bottom-cta p{color:rgba(255,255,255,.92);margin-bottom:30px;position:relative;z-index:2}
+.bottom-cta .btn{position:relative;z-index:2}
+
+footer{padding:34px 0 108px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.08em;border-top:1px solid var(--line)}
+@media(min-width:761px){footer{padding-bottom:34px}}
+.foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+.sticky-cta{
+  position:fixed;left:0;right:0;bottom:0;z-index:80;display:none;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(10px);
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+  border-top:1px solid var(--line);box-shadow:0 -8px 24px rgba(31,51,80,.08);
+}
+.sticky-cta .btn{width:100%;justify-content:center;padding:15px}
+@media(max-width:760px){.sticky-cta{display:block}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-dl" viewBox="0 0 24 24"><path d="M12 4v10M8 10.5l4 4 4-4"/><path d="M5 19h14"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M10 12h5M10 16h5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></symbol>
+    <symbol id="i-pages" viewBox="0 0 24 24"><path d="M8 3h9a2 2 0 012 2v12"/><rect x="5" y="7" width="12" height="14" rx="2"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8v.3"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 4l1.8 4.7L18.5 10l-4.7 1.8L12 16.5l-1.8-4.7L5.5 10l4.7-1.3z"/><path d="M18.5 15.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></symbol>
+  </defs>
+</svg>
+
+<header>
+  <div class="wrap nav">
+    <div class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></span><b>CARA</b> Platform <span style="font-size:11px;color:var(--ink-soft)">| JAPAN</span></div>
+    <nav class="nav-links">
+      <a href="#">CARAとは</a>
+      <a href="#">選ばれる理由</a>
+      <a href="#">導入事例</a>
+      <a href="#">ウェビナー・イベント</a>
+      <a href="#" class="on">資料</a>
+    </nav>
+    <a class="btn btn-coral nav-cta" href="#dlform"><svg class="ico"><use href="#i-dl"/></svg>資料ダウンロード</a>
+  </div>
+</header>
+
+<div class="crumbs"><div class="wrap"><a href="#">TOP</a> / <a href="#">資料ダウンロード</a> / <b>分断されたシステムの隠れたコスト</b></div></div>
+
+<!-- ヒーロー -->
+<section class="wp-hero">
+  <div class="wrap grid">
+    <div>
+      <span class="doc-tag"><svg class="ico" style="width:13px;height:13px"><use href="#i-doc"/></svg>ホワイトペーパー</span>
+      <h1>分断されたシステムの隠れたコスト<br>— 規制業界における情報管理の実態</h1>
+      <p class="sub">コンプライアンス違反のコストは、適切な管理体制を維持するコストの約3倍——。規制業界の情報管理に潜むリスクとコストを、調査データとともに解き明かす本社発レポートの日本語版です。</p>
+      <div class="doc-meta">
+        <span><svg class="ico"><use href="#i-pages"/></svg>全XXページ / PDF</span>
+        <span><svg class="ico"><use href="#i-clock"/></svg>読了目安 10分</span>
+        <span><svg class="ico"><use href="#i-check"/></svg>無料ダウンロード</span>
+      </div>
+    </div>
+    <div class="cover" aria-hidden="true">
+      <div class="c-band"></div>
+      <div class="c-logo">CARA WHITEPAPER</div>
+      <div class="c-title">分断されたシステムの<br>隠れたコスト</div>
+      <div class="c-sub">規制業界における情報管理の実態調査<br>GENERIS</div>
+      <div class="c-deco"></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap layout">
+  <!-- メインカラム -->
+  <div class="main-col">
+
+    <div class="block reveal">
+      <h2><span class="b-ico"><svg class="ico"><use href="#i-info"/></svg></span>この資料について</h2>
+      <p>多くの規制業界企業では、文書・データ・プロセスが<b>複数のシステムに分断されたまま</b>管理されています。その状態が生む「見えないコスト」——重複作業、監査対応の長時間化、コンプライアンスリスク——を、調査データをもとに定量的に示したレポートです。</p>
+      <div class="key-stats">
+        <div class="ks"><b>約3倍</b><span>コンプライアンス違反のコストは<br>適切な管理維持費の約3倍</span></div>
+        <div class="ks"><b>XX%</b><span>複数システムの重複管理に<br>起因する工数の割合(調査値)</span></div>
+        <div class="ks"><b>XX時間</b><span>監査対応1件あたりの<br>平均文書収集時間(調査値)</span></div>
+      </div>
+    </div>
+
+    <div class="block reveal">
+      <h2><span class="b-ico"><svg class="ico"><use href="#i-check"/></svg></span>この資料でわかること</h2>
+      <ul class="learn-list">
+        <li><svg class="ico"><use href="#i-check"/></svg><span>システム分断が生む<b>「隠れたコスト」の正体</b>と算出の考え方</span></li>
+        <li><svg class="ico"><use href="#i-check"/></svg><span>規制業界における<b>情報管理の失敗パターン</b>と回避策</span></li>
+        <li><svg class="ico"><use href="#i-check"/></svg><span>文書・データ・プロセスを<b>統合管理するアプローチ</b>の全体像</span></li>
+        <li><svg class="ico"><use href="#i-check"/></svg><span>既存システムを活かした<b>段階的なモダナイゼーション</b>の進め方</span></li>
+      </ul>
+    </div>
+
+    <div class="block reveal">
+      <h2><span class="b-ico"><svg class="ico"><use href="#i-list"/></svg></span>目次</h2>
+      <ol class="toc">
+        <li><span>規制業界を取り巻く情報管理の現状<small>文書量・データ量の増大と規制の厳格化</small></span></li>
+        <li><span>分断されたシステムが生む5つの隠れたコスト<small>重複作業/監査対応/教育コスト/ライセンス/リスク</small></span></li>
+        <li><span>調査データで見る実態<small>コンプライアンス違反コストと管理体制の相関</small></span></li>
+        <li><span>統合管理プラットフォームというアプローチ<small>コンテンツ・データ・プロセスの一元化</small></span></li>
+        <li><span>段階導入のロードマップ<small>既存資産と共存しながら前進する現実解</small></span></li>
+      </ol>
+    </div>
+
+    <div class="block reveal">
+      <h2><span class="b-ico"><svg class="ico"><use href="#i-target"/></svg></span>こんな方におすすめ</h2>
+      <ul class="rec-list">
+        <li><svg class="ico"><use href="#i-check"/></svg><span>製造業(自動車/化学/製薬/医療機器)で情報システム・DX推進を担当している方</span></li>
+        <li><svg class="ico"><use href="#i-check"/></svg><span>品質保証・薬事部門で、監査対応や文書管理の工数に課題を感じている方</span></li>
+        <li><svg class="ico"><use href="#i-check"/></svg><span>システム統合・レガシー刷新の投資判断に、定量的な根拠が欲しい方</span></li>
+      </ul>
+    </div>
+
+    <div class="block reveal">
+      <h2><span class="b-ico"><svg class="ico"><use href="#i-info"/></svg></span>資料概要</h2>
+      <table class="spec">
+        <tr><th>資料名</th><td>分断されたシステムの隠れたコスト — 規制業界における情報管理の実態</td></tr>
+        <tr><th>形式</th><td>PDF(全XXページ)</td></tr>
+        <tr><th>発行</th><td>Generis(本社発行レポートの日本語版)</td></tr>
+        <tr><th>料金</th><td>無料</td></tr>
+        <tr><th>提供方法</th><td>フォーム送信後、サンクスページおよび自動返信メールにてダウンロードURLをご案内</td></tr>
+      </table>
+    </div>
+
+    <div class="block reveal">
+      <h2><span class="b-ico"><svg class="ico"><use href="#i-doc"/></svg></span>関連資料</h2>
+      <div class="rel-grid">
+        <a class="rel-card" href="#">
+          <span class="r-tag">WHITEPAPER</span>
+          <span class="r-title">AI生成文書の監査証跡 — 規制対応とAI活用を両立する方法</span>
+        </a>
+        <a class="rel-card" href="#">
+          <span class="r-tag">PRODUCT</span>
+          <span class="r-title">3分でわかるCARA — 製品概要資料</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- サイドDLフォーム -->
+  <aside class="dl-card reveal" id="dlform">
+    <div class="dl-head"><svg class="ico"><use href="#i-dl"/></svg>無料ダウンロード</div>
+    <p class="dl-sub">下記フォームご入力後、すぐにご覧いただけます(入力目安1分)。</p>
+    <div class="f-field"><label>会社名<i>*</i></label><div class="f-input">株式会社〇〇</div></div>
+    <div class="f-field"><label>氏名<i>*</i></label><div class="f-input">山田 太郎</div></div>
+    <div class="f-field"><label>会社メールアドレス<i>*</i></label><div class="f-input">t.yamada@example.co.jp</div></div>
+    <div class="f-field"><label>部署・役職</label><div class="f-input">品質保証部 / 課長</div></div>
+    <div class="f-consent"><span class="box"></span><span>個人情報の取り扱いについて<a href="#">プライバシーポリシー</a>に同意します</span></div>
+    <a class="btn btn-coral btn-lg" href="#"><svg class="ico"><use href="#i-dl"/></svg>同意してダウンロード</a>
+    <div class="dl-flow">送信後、サンクスページに移動します<br>ダウンロードURLはメールでもお届け</div>
+    <div class="hs-note">// 本番実装: HubSpotフォーム埋め込み。送信→サンクスページへリダイレクト+HubSpotワークフローで自動返信メール</div>
+  </aside>
+</div>
+
+<!-- 下部CTA -->
+<section class="bottom-cta">
+  <div class="wrap">
+    <h2 class="reveal">読んだあとは、"自社の場合"を<br>確かめてみませんか。</h2>
+    <p class="reveal">無料デモ・個別相談で、貴社の業務に合わせて具体化します。</p>
+    <a class="btn btn-coral btn-lg reveal" href="#">無料デモ・個別相談を申し込む</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <span>© 2026 GENERIS — CARA PLATFORM JAPAN</span>
+    <span>WHITEPAPER DETAIL PAGE MOCKUP v1.0 / 2026-08-16</span>
+  </div>
+</footer>
+
+<div class="sticky-cta">
+  <a class="btn btn-coral" href="#dlform"><svg class="ico"><use href="#i-dl"/></svg>無料でダウンロード</a>
+</div>
+
+<script>
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}})},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

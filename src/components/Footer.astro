@@ -1,0 +1,26 @@
+---
+/**
+ * Footer.astro — 共通フッター。
+ * mocks/CARA_TOP_design_mock.html の <footer> を移植。
+ * モック右側の「DESIGN MOCKUP v4.0 / 2026-08-16」はモック管理用の表記のため出力しない。
+ */
+import { SITE } from '../consts';
+---
+
+<footer>
+  <div class="wrap foot">
+    <a class="foot-logo" href="/">
+      <img src="/images/cara_logo_color.svg" alt="CARA Platform" width="107" height="22" />
+    </a>
+    <span>{SITE.copyright}</span>
+  </div>
+</footer>
+
+<style>
+  footer{padding:36px 0 110px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.08em;border-top:1px solid var(--line)}
+  @media(min-width:761px){footer{padding-bottom:36px}}
+  /* ロゴと著作権表記で高さが違うため align-items を足している */
+  .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .foot-logo{display:flex;align-items:center}
+  .foot-logo img{height:22px;width:auto;display:block}
+</style>

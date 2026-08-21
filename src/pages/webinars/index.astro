@@ -1,0 +1,186 @@
+---
+/**
+ * ウェビナー一覧 — mocks/CARA_webinar_design_mock.html を正として移植。
+ * 表示内容は src/content/webinars/*.mdx から自動生成される(MDXを足すだけで反映)。
+ * 開催予定 / アーカイブの振り分け方針は src/lib/webinars.ts の splitWebinars を参照。
+ */
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import SectionLabel from '../../components/SectionLabel.astro';
+import { WEBINAR } from '../../consts';
+import { formatDate, splitWebinars } from '../../lib/webinars';
+import '../../styles/webinar.css';
+
+const all = await getCollection('webinars');
+const { upcoming, archive } = splitWebinars(all);
+
+// アーカイブサムネのグラデは3種を順番に使い回す(モックの .arc-thumb / t2 / t3)
+const THUMBS = ['', 't2', 't3'];
+---
+
+<Base
+  title="ウェビナー・イベント一覧 | CARA Platform 日本版"
+  description="CARAの基本機能・実演デモ・導入事例を体感できる無料オンラインウェビナーを定期開催しています。"
+  bodyClass="webinar-list"
+  navCurrent="/webinars"
+  stickyCta={{ href: '#upcoming', label: '次回ウェビナーに申し込む', icon: 'i-cal' }}
+>
+  <Breadcrumbs items={[{ label: 'TOP', href: '/' }, { label: 'ウェビナー・イベント' }]} />
+
+  {/* ページヘッダー */}
+  <section class="page-hero">
+    <div class="wrap inner">
+      <SectionLabel icon="i-cal" reveal={false}>WEBINAR &amp; EVENTS</SectionLabel>
+      <h1>ウェビナー・イベント</h1>
+      <p>CARAの基本機能・実演デモ・導入事例を体感できる無料オンラインウェビナーを定期開催しています。</p>
+      <div class="ph-points">
+        {
+          WEBINAR.heroChips.map((c) => (
+            <span class="chip">
+              <svg class="ico"><use href={`#${c.icon}`} /></svg>
+              {c.text}
+            </span>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* タブ: 同一ページ内のアンカー。.on は読み込み時とクリック時にJSで同期する */}
+  <nav class="tabs" aria-label="一覧切り替え">
+    <a href="#upcoming" class="on">開催予定</a>
+    <a href="#archive">アーカイブ配信</a>
+  </nav>
+
+  {/* 開催予定 */}
+  <section class="upcoming" id="upcoming">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <h2>開催予定のウェビナー</h2>
+        <span class="count">ALL <b>{upcoming.length}</b> EVENTS</span>
+      </div>
+
+      {
+        upcoming.length === 0 ? (
+          <div class="empty-note reveal">
+            現在ご案内できる開催予定はありません。次回の開催が決まり次第、こちらに掲載します。
+          </div>
+        ) : (
+          <div class="event-list">
+            {upcoming.map((w, i) => {
+              const d = formatDate(w.data.date);
+              // NEXTバッジは開催日が最も近い1件(昇順ソート済みの先頭)に自動付与
+              const isNext = i === 0;
+              return (
+                <div class:list={['event-row', 'reveal', { next: isNext }]}>
+                  {isNext && <span class="next-badge">NEXT</span>}
+                  <div class="ev-date">
+                    <div class="m">{d.monthLabel}</div>
+                    <div class="d">{d.day}</div>
+                    <div class="t">({d.weekday}) {w.data.timeLabel}</div>
+                  </div>
+                  <div class="ev-info">
+                    <h3><a href={`/webinars/${w.id}/`}>{w.data.title}</a></h3>
+                    <div class="ev-meta">
+                      <span><svg class="ico"><use href="#i-monitor" /></svg>オンライン</span>
+                      <span><svg class="ico"><use href="#i-check" /></svg>無料</span>
+                      {w.data.highlight && (
+                        <span><svg class="ico"><use href="#i-play" /></svg>{w.data.highlight}</span>
+                      )}
+                    </div>
+                  </div>
+                  <div class="ev-cta">
+                    <a class:list={['btn', isNext ? 'btn-coral' : 'btn-primary']} href={`/webinars/${w.id}/`}>
+                      詳細・申込 →
+                    </a>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  {/* アーカイブ */}
+  <section class="archive" id="archive">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <h2>アーカイブ配信</h2>
+        <span class="count">ALL <b>{archive.length}</b> VIDEOS</span>
+      </div>
+      <p class="lead reveal">開催済みウェビナーの録画を、フォーム入力後すぐにご視聴いただけます。</p>
+
+      {
+        archive.length === 0 ? (
+          <div class="empty-note reveal" style="margin-top:26px">
+            公開中のアーカイブはまだありません。開催後、順次追加します。
+          </div>
+        ) : (
+          <div class="arc-grid">
+            {archive.map((w, i) => (
+              <div class="arc-card reveal">
+                <div class:list={['arc-thumb', THUMBS[i % THUMBS.length]]}>
+                  <span class="play-circle">
+                    <svg viewBox="0 0 24 24"><path d="M8 5l12 7-12 7z" /></svg>
+                  </span>
+                  <span class="gate-badge">
+                    <svg class="ico"><use href="#i-lock" /></svg>フォームで視聴
+                  </span>
+                </div>
+                <div class="arc-body">
+                  <div class="date">{formatDate(w.data.date).slash} 開催</div>
+                  <h3><a href={`/webinars/${w.id}/`}>{w.data.title}</a></h3>
+                </div>
+              </div>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  {/* 特典帯 */}
+  <section class="perks">
+    <div class="wrap">
+      <div class="perk-strip reveal">
+        <div class="head"><svg class="ico"><use href="#i-gift" /></svg>ウェビナー参加特典</div>
+        <div class="perk-items">
+          {
+            WEBINAR.perkItems.map((p) => (
+              <span><svg class="ico"><use href="#i-check" /></svg>{p}</span>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* クロージング */}
+  <section class="closing">
+    <div class="wrap">
+      <h2 class="reveal">開催を待たずに、<br />今すぐ詳しく知りたい方へ</h2>
+      <p class="reveal">製品資料のダウンロード、個別デモのご依頼はこちらから。</p>
+      <div class="btns reveal">
+        <a class="btn btn-white btn-lg" href="/#contact">
+          <svg class="ico"><use href="#i-dl" /></svg>製品資料を無料ダウンロード
+        </a>
+        <a class="btn btn-coral btn-lg" href="/#contact">無料デモ・個別相談</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // タブの .on を現在のハッシュと同期させる(モックは静的に開催予定が .on)
+  const tabs = document.querySelectorAll<HTMLAnchorElement>('.tabs a');
+  const sync = () => {
+    const hash = location.hash || '#upcoming';
+    tabs.forEach((t) => t.classList.toggle('on', t.getAttribute('href') === hash));
+  };
+  tabs.forEach((t) => t.addEventListener('click', () => setTimeout(sync, 0)));
+  window.addEventListener('hashchange', sync);
+  sync();
+</script>

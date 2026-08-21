@@ -1,0 +1,178 @@
+---
+/**
+ * 資料一覧 — mocks/CARA_whitepaper_list_mock.html を正として移植。
+ * 表示内容は src/content/whitepapers/*.mdx から自動生成される(MDXを足すだけで反映)。
+ *
+ * カテゴリタブはクライアントサイドの絞り込み。
+ * 各カードに data-category を持たせ、JSで hidden を切り替える(ページ遷移なし)。
+ * フィーチャー枠(まずはこちら)は固定のおすすめ枠なので絞り込みの対象外にしている。
+ */
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import SectionLabel from '../../components/SectionLabel.astro';
+import Cover from '../../components/Cover.astro';
+import { WHITEPAPER } from '../../consts';
+import '../../styles/whitepaper.css';
+
+const all = await getCollection('whitepapers');
+// 表示順: フィーチャー → カテゴリ順 → タイトル順(MDXの読み込み順に依存させない)
+const CATEGORY_ORDER = { product: 0, whitepaper: 1, industry: 2 } as const;
+const docs = [...all].sort(
+  (a, b) =>
+    CATEGORY_ORDER[a.data.category] - CATEGORY_ORDER[b.data.category] ||
+    a.data.title.localeCompare(b.data.title, 'ja')
+);
+const featured = docs.filter((d) => d.data.featured);
+---
+
+<Base
+  title="資料ダウンロード・ホワイトペーパー | CARA Platform 日本版"
+  description="製品資料から業界別の活用ガイド、調査レポートまで。すべて無料でダウンロードいただけます。"
+  bodyClass="whitepaper-list"
+  navCurrent="/whitepapers"
+  stickyCta={{ href: '#featured', label: '製品資料を無料ダウンロード', icon: 'i-dl' }}
+>
+  <Breadcrumbs items={[{ label: 'TOP', href: '/' }, { label: '資料ダウンロード・ホワイトペーパー' }]} />
+
+  {/* ページヘッダー */}
+  <section class="page-hero">
+    <div class="wrap inner">
+      <SectionLabel icon="i-doc" reveal={false}>WHITEPAPER &amp; DOCUMENTS</SectionLabel>
+      <h1>資料ダウンロード・ホワイトペーパー</h1>
+      <p>製品資料から業界別の活用ガイド、調査レポートまで。すべて無料でダウンロードいただけます。</p>
+      <div class="flow">
+        {
+          WHITEPAPER.flow.map((f, i) => (
+            <Fragment>
+              {i > 0 && <i />}
+              <span><svg class="ico"><use href={`#${f.icon}`} /></svg>{f.text}</span>
+            </Fragment>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* カテゴリタブ(クライアントサイド絞り込み) */}
+  <nav class="tabs" aria-label="カテゴリ">
+    {
+      WHITEPAPER.tabs.map((t, i) => (
+        <button type="button" class:list={['tab', { on: i === 0 }]} data-filter={t.key} aria-pressed={i === 0 ? 'true' : 'false'}>
+          {t.label}
+        </button>
+      ))
+    }
+  </nav>
+
+  {/* まずはこちら(featured) */}
+  {
+    featured.length > 0 && (
+      <section class="featured" id="featured">
+        <div class="wrap">
+          {featured.map((d) => {
+            const meta = WHITEPAPER.categoryMeta[d.data.category];
+            return (
+              <div class="feat-card reveal">
+                <span class="feat-badge">まずはこちら</span>
+                <div class="feat-cover">
+                  <Cover {...d.data.cover} size="lg" />
+                </div>
+                <div class="feat-body">
+                  <span class:list={['doc-tag', meta.tag]}>
+                    <svg class="ico"><use href={`#${meta.icon}`} /></svg>{meta.label}
+                  </span>
+                  <h2>{d.data.title}</h2>
+                  <p class="desc">{d.data.description}</p>
+                  <div class="doc-meta">
+                    {d.data.pages && <span><svg class="ico"><use href="#i-pages" /></svg>{d.data.pages}</span>}
+                    {d.data.readTime && <span><svg class="ico"><use href="#i-clock" /></svg>{d.data.readTime}</span>}
+                    <span><svg class="ico"><use href="#i-check" /></svg>{WHITEPAPER.fee}</span>
+                  </div>
+                  <a class="btn btn-coral btn-lg" href={`/whitepapers/${d.id}/`}>
+                    <svg class="ico"><use href="#i-dl" /></svg>無料でダウンロード
+                  </a>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+    )
+  }
+
+  {/* 資料一覧 */}
+  <section class="docs">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <h2>資料一覧</h2>
+        <span class="count">ALL <b data-count>{docs.length}</b> DOCUMENTS</span>
+      </div>
+      <div class="doc-grid">
+        {
+          docs.map((d) => {
+            const meta = WHITEPAPER.categoryMeta[d.data.category];
+            return (
+              <div class="doc-card reveal" data-category={d.data.category}>
+                <div class="doc-thumb">
+                  <Cover {...d.data.cover} size="sm" />
+                </div>
+                <div class="doc-body">
+                  <span class:list={['doc-tag', meta.tag]}>
+                    <svg class="ico"><use href={`#${meta.icon}`} /></svg>{meta.label}
+                  </span>
+                  <h3><a href={`/whitepapers/${d.id}/`}>{d.data.title}</a></h3>
+                  <p class="d-desc">{d.data.description}</p>
+                  <a class="btn btn-primary" href={`/whitepapers/${d.id}/`}>
+                    <svg class="ico"><use href="#i-dl" /></svg>ダウンロード
+                  </a>
+                </div>
+              </div>
+            );
+          })
+        }
+      </div>
+      <div class="docs-empty" hidden>このカテゴリの資料はまだありません。</div>
+    </div>
+  </section>
+
+  {/* クロージング */}
+  <section class="closing">
+    <div class="wrap">
+      <h2 class="reveal">資料を読んで、次の一歩へ。</h2>
+      <p class="reveal">「自社の場合はどうなるか」を確かめたい方は、無料デモ・個別相談をご利用ください。</p>
+      <div class="btns reveal">
+        <a class="btn btn-white btn-lg" href="/#contact">無料デモ・個別相談</a>
+        <a class="btn btn-coral btn-lg" href="/webinars">
+          <svg class="ico"><use href="#i-dl" /></svg>ウェビナーに参加する
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // カテゴリタブによる絞り込み。サーバー側は全件出力し、表示/非表示だけを切り替える。
+  const tabs = document.querySelectorAll<HTMLButtonElement>('.tabs .tab');
+  const cards = document.querySelectorAll<HTMLElement>('.doc-card');
+  const countEl = document.querySelector<HTMLElement>('[data-count]');
+  const emptyEl = document.querySelector<HTMLElement>('.docs-empty');
+
+  function apply(key: string) {
+    let visible = 0;
+    cards.forEach((c) => {
+      const hit = key === 'all' || c.dataset.category === key;
+      c.hidden = !hit;
+      if (hit) visible++;
+    });
+    if (countEl) countEl.textContent = String(visible);
+    if (emptyEl) emptyEl.hidden = visible > 0;
+    tabs.forEach((t) => {
+      const on = t.dataset.filter === key;
+      t.classList.toggle('on', on);
+      t.setAttribute('aria-pressed', String(on));
+    });
+  }
+
+  tabs.forEach((t) => t.addEventListener('click', () => apply(t.dataset.filter || 'all')));
+</script>

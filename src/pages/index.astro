@@ -1,0 +1,450 @@
+---
+/**
+ * TOPページ — mocks/CARA_TOP_design_mock.html を正として移植。
+ * セクションCSSは src/styles/top.css(モックの<style>から1:1移植)。
+ */
+import Base from '../layouts/Base.astro';
+import SectionLabel from '../components/SectionLabel.astro';
+import HubspotForm from '../components/HubspotForm.astro';
+import { SITE, STATS, CUSTOMER_LOGOS, HUBSPOT } from '../consts';
+import '../styles/top.css';
+
+const faqs = [
+  {
+    q: '料金体系を教えてください',
+    a: '1ユーザー1ライセンスのシンプルな体系です。機能・モジュールごとの追加課金はありません。詳細はお問い合わせください。',
+  },
+  {
+    q: '既存の文書管理システムからの移行は必要ですか?',
+    a: '全面移行は不要です。既存システムと連携・共存しながら、段階的に導入いただけます。移行を選択される場合も、専用の移行プロセスでご支援します。',
+  },
+  {
+    q: '導入までどのくらいかかりますか?',
+    a: '導入範囲によりますが、対象業務を絞ったスモールスタートなら短期間での立ち上げが可能です。個別にお見積り・スケジュールをご提示します。',
+  },
+  {
+    q: '日本語でのサポートはありますか?',
+    a: 'はい。日本市場向けの体制で、導入から運用まで日本語でご支援します。',
+  },
+];
+---
+
+<Base title={SITE.title}>
+  {/* ① ヒーロー */}
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="hero-eyebrow">
+          <svg class="ico"><use href="#i-shield" /></svg>製薬・製造など規制業界に特化
+        </div>
+        {/*
+          .ph は display:inline-block。文節単位で折り返させ、狭い幅でも
+          文の途中で不自然に切れないようにしている。
+          spanどうしの間に改行・空白を入れると和文に余分なアキが出るため詰めて書くこと。
+        */}
+        <h1>
+          <span class="ph"><span class="blue">AIで作った文書</span>を、</span><span class="ph"><span class="marker">そのまま監査に出せる</span>。</span><br /><span class="ph">薬事・品質・監査の</span><span class="ph">業務を、速く、確実に。</span>
+        </h1>
+        <p class="hero-sub">
+          CARAは、製薬・製造など規制産業向けの文書・データ・業務プロセス統合管理プラットフォーム。作成・承認からAIの出力まで、すべての操作に監査証跡が残ります。
+        </p>
+        <div class="hero-ctas">
+          <a class="btn btn-coral btn-lg" href="#contact">
+            <svg class="ico"><use href="#i-dl" /></svg>製品資料を無料ダウンロード
+          </a>
+          <a class="btn btn-ghost" href="#contact">
+            <svg class="ico"><use href="#i-play" /></svg>無料デモを依頼
+          </a>
+        </div>
+        <div class="trustbar">
+          <span class="chip"><svg class="ico"><use href="#i-shield" /></svg>ISO/IEC 27001</span>
+          <span class="chip"><svg class="ico"><use href="#i-check" /></svg>21 CFR Part 11 / GxP / GDPR</span>
+        </div>
+      </div>
+
+      {/* ヒーローイラスト(原本: assets-src/hero_illustration.svg) */}
+      <div class="hero-art" aria-hidden="true">
+        <img src="/images/hero_illustration.svg" alt="" width="560" height="470" />
+      </div>
+    </div>
+
+    {/* 統計帯 */}
+    <div class="stats">
+      <div class="wrap stats-grid">
+        {
+          STATS.map((s) => (
+            <div class="stat reveal">
+              <div class="num">
+                <span data-count={s.value}>0</span>
+                <em>{s.suffix}</em>
+              </div>
+              <div class="lbl">{s.label}</div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* 導入実績 — 統計帯(青グラデ)の直下に置く白背景ブロック。
+      次の課題セクション(tint)との間で 青 → 白 → 淡青 のリズムを作る。 */}
+  <section class="trusted">
+    <div class="wrap">
+      <div class="trusted-label">TRUSTED BY GLOBAL LEADERS</div>
+      <p class="trusted-lead">
+        Bayer、Pfizer、Merckをはじめ、世界をリードする企業がCARAを選んでいます。
+      </p>
+    </div>
+    {/*
+      実名・実ロゴの掲載可否は本社確認前で未確定。
+      確認が取れるまでは公開前に差し替えるか、このマーキー自体を非表示にすること。
+      上のリード文にも Bayer / Pfizer / Merck の実名が入っている点に注意。
+      ロゴの管理は src/consts.ts の CUSTOMER_LOGOS。
+      マーキーは同じ並びを4周分置いて translateX(-25%) でループさせる。
+      周回数を変えるときは top.css の @keyframes marq の移動量も
+      「-100% ÷ 周回数」に必ず合わせること(ずれると継ぎ目が飛ぶ)。
+      継ぎ目が出ない最大表示幅は (周回数 - 1) × 1周分の幅。
+    */}
+    <div class="marquee reveal" aria-hidden="true">
+      <div class="marquee-track">
+        {[0, 1, 2, 3].map(() =>
+          CUSTOMER_LOGOS.map((logo) => (
+            <span class="logo-cell">
+              <img
+                src={`/images/logos/${logo.file}`}
+                alt={logo.name}
+                class={`logo-mark lm-${logo.file.replace('.svg', '')}`}
+                loading="lazy"
+              />
+            </span>
+          ))
+        )}
+      </div>
+    </div>
+  </section>
+
+  {/* ② 課題 */}
+  <section class="pain">
+    <div class="wrap">
+      <SectionLabel icon="i-alert">PAIN POINTS</SectionLabel>
+      <h2 class="reveal">こんなお悩みは<span class="u">ありませんか?</span></h2>
+      <div class="pain-list">
+        <div class="pain-item reveal">
+          <span class="p-ico c1"><svg class="ico"><use href="#i-factory" /></svg></span>
+          <span>自動車・化学・製薬・医療機器など製造業で、<b>薬事・品質保証・監査・法規対応</b>の業務負荷が年々増えている</span>
+        </div>
+        <div class="pain-item reveal">
+          <span class="p-ico c2"><svg class="ico"><use href="#i-alert" /></svg></span>
+          <span>AIを業務に使いたいが、<b>生成した文書を監査や査察でどう説明するか</b>が壁になっている</span>
+        </div>
+        <div class="pain-item reveal">
+          <span class="p-ico c3"><svg class="ico"><use href="#i-yen" /></svg></span>
+          <span>文書管理システムのライセンス費用が、<b>人数×機能×製品ごと</b>に膨らみ続けている</span>
+        </div>
+        <div class="pain-item reveal">
+          <span class="p-ico c4"><svg class="ico"><use href="#i-link" /></svg></span>
+          <span>既存システムを捨てられず、<b>DXが「検討止まり」</b>になっている</span>
+        </div>
+      </div>
+      <p class="bridge reveal">その課題、世界の規制業界では<span class="em">すでに解決が進んでいます</span>。</p>
+    </div>
+  </section>
+
+  {/* ③ CARAとは */}
+  <section id="about">
+    <div class="wrap">
+      <SectionLabel icon="i-doc">WHAT IS CARA</SectionLabel>
+      <h2 class="reveal">CARAとは — 規制業界のために<br />生まれた次世代プラットフォーム</h2>
+      <div class="about-grid">
+        <div class="about-copy reveal">
+          <p>
+            CARAは、高度なコンプライアンスが求められる業界のために設計された、<b>文書・データ・業務プロセスの統合管理プラットフォーム</b>です。
+          </p>
+          <p>
+            単なる文書管理システムではありません。文書の作成からレビュー・承認・改訂までを電子ワークフローで一元管理し、<b
+              >「誰が・いつ・何をしたか」をすべての操作で自動記録</b
+            >。規制要件に標準対応した基盤の上で、AIによる業務効率化までを実現します。
+          </p>
+          <p>
+            Documentumをはじめとするレガシー文書管理システムの後継として、世界の大手製薬・化学・自動車メーカーに採用が広がっています。
+          </p>
+          <ul class="scene">
+            <li><svg class="ico"><use href="#i-check" /></svg>SOPや規制文書の作成〜承認〜改訂を電子ワークフローで管理</li>
+            <li><svg class="ico"><use href="#i-check" /></svg>全操作の監査証跡が自動で残り、査察・顧客監査にそのまま対応</li>
+            <li><svg class="ico"><use href="#i-check" /></svg>AIが監査照会対応のドラフト生成や文書レビューを支援</li>
+          </ul>
+        </div>
+        <div class="diagram reveal">
+          <div class="d-nodes">
+            <div class="d-node"><svg class="ico"><use href="#i-doc" /></svg>文書管理<small>作成・改訂・版管理</small></div>
+            <div class="d-node"><svg class="ico"><use href="#i-flow" /></svg>ワークフロー<small>レビュー・承認</small></div>
+            <div class="d-node"><svg class="ico"><use href="#i-db" /></svg>データ管理<small>メタデータ・検索</small></div>
+            <div class="d-node"><svg class="ico"><use href="#i-spark" /></svg>AI<small>生成・レビュー支援</small></div>
+          </div>
+          <div class="d-core">CARA<small>統合プラットフォーム</small></div>
+          <div class="d-base">
+            監査証跡 × セキュリティ × コンプライアンス<small>21 CFR Part 11 / GxP / GDPR 標準対応</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ④ 3つの理由 */}
+  <section class="reasons" id="reasons">
+    <div class="wrap">
+      <SectionLabel icon="i-shield">WHY CARA</SectionLabel>
+      <h2 class="reveal">CARAが選ばれる、<span class="u">3つの理由</span></h2>
+      <div class="reason-list">
+        <div class="reason feat reveal">
+          <span class="no">REASON 01</span>
+          <div class="r-art"><img src="/images/reason_01_audit.svg" alt="" width="140" height="110" /></div>
+          <h3>AIが生成した文書にも、完全な監査証跡</h3>
+          <p>
+            「どのAIが・どの入力から・いつ出力したか」「誰が確認・承認したか」までを自動記録。AI生成コンテンツのエビデンスをそのまま監査・査察に提出できます。
+          </p>
+          <span class="kicker">規制業界でAIを"安心して"使える — CARA最大の差別化ポイント</span>
+        </div>
+        <div class="reason reveal">
+          <span class="no">REASON 02</span>
+          <div class="r-art"><img src="/images/reason_02_license.svg" alt="" width="140" height="110" /></div>
+          <h3>1ユーザー1ライセンス。<br />それだけ。</h3>
+          <p>
+            機能・モジュールごとの追加課金なし。全機能がひとつのライセンスに含まれるから、利用が広がってもコストが読める。複数製品併用と比べ費用を大幅に抑制します。
+          </p>
+        </div>
+        <div class="reason reveal">
+          <span class="no">REASON 03</span>
+          <div class="r-art"><img src="/images/reason_03_integration.svg" alt="" width="140" height="110" /></div>
+          <h3>既存システムを、<br />捨てなくていい。</h3>
+          <p>
+            SharePointや基幹システムなど既存資産と連携しながら、効果の大きい業務から段階的に導入。「置き換える」のではなく「共存しながら前進する」アプローチです。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ⑤ 実演イメージ */}
+  <section id="demo">
+    <div class="wrap">
+      <SectionLabel icon="i-play">LIVE DEMO IMAGE</SectionLabel>
+      <h2 class="reveal">CARAのAIが返すアウトプットを、<br />ご覧ください</h2>
+      <div class="demo-cards">
+        <div class="demo-card reveal">
+          <div class="ui-mock">
+            <div class="ui-win">
+              <div class="ui-bar"><i></i><i></i><i></i></div>
+              <div class="ui-body">
+                <div class="ui-line w60"></div>
+                <div class="ui-line w80"></div>
+                <div class="ui-ai">
+                  <span class="tag-ai"><svg class="ico"><use href="#i-spark" /></svg>CARA AI DRAFT</span>
+                  <div class="ui-line"></div>
+                  <div class="ui-line w80"></div>
+                  <div class="ui-line w60"></div>
+                </div>
+                <div class="ui-verified">
+                  <span><svg class="ico"><use href="#i-check" /></svg>TRAIL RECORDED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="demo-body">
+            <h3><svg class="ico"><use href="#i-doc" /></svg>監査照会対応のドラフト生成</h3>
+            <p>過去の類似照会と社内文書をもとに、回答ドラフトを数分で生成。担当者はレビューに集中できます。</p>
+          </div>
+        </div>
+        <div class="demo-card reveal">
+          <div class="ui-mock">
+            <div class="ui-win">
+              <div class="ui-bar"><i></i><i></i><i></i></div>
+              <div class="ui-body">
+                <div class="ui-line w80"></div>
+                <div class="ui-ai">
+                  <span class="tag-ai"><svg class="ico"><use href="#i-search" /></svg>Q&A — 根拠文書リンク付き</span>
+                  <div class="ui-line w80"></div>
+                  <div class="ui-line"></div>
+                  <div class="ui-line w60"></div>
+                </div>
+                <div class="ui-verified">
+                  <span><svg class="ico"><use href="#i-check" /></svg>SOURCE CITED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="demo-body">
+            <h3><svg class="ico"><use href="#i-search" /></svg>規制文書へのQ&A</h3>
+            <p>「この変更に必要な申請区分は?」——膨大な規制文書・社内SOPに自然言語で質問し、根拠付きの回答を取得。</p>
+          </div>
+        </div>
+        <div class="demo-card reveal">
+          <div class="ui-mock">
+            <div class="ui-win">
+              <div class="ui-bar"><i></i><i></i><i></i></div>
+              <div class="ui-body">
+                <div class="ui-line w80"></div>
+                <div class="ui-line w60 diff"></div>
+                <div class="ui-ai">
+                  <span class="tag-ai"><svg class="ico"><use href="#i-flow" /></svg>DIFF & REVIEW</span>
+                  <div class="ui-line w60"></div>
+                  <div class="ui-line w80"></div>
+                </div>
+                <div class="ui-verified">
+                  <span><svg class="ico"><use href="#i-check" /></svg>AI PRE-REVIEWED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="demo-body">
+            <h3><svg class="ico"><use href="#i-flow" /></svg>文書レビューの自動化</h3>
+            <p>改訂版と旧版の差分検出、記載ゆれ・必須項目のチェックをAIが一次レビュー。確認時間を大幅に短縮します。</p>
+          </div>
+        </div>
+      </div>
+      <div class="mid-cta reveal">
+        <a class="btn btn-primary" href="#contact">
+          <svg class="ico"><use href="#i-play" /></svg>実際の画面をデモで見る
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {/* ⑥ 導入事例 */}
+  <section class="cases" id="cases">
+    <div class="wrap">
+      <SectionLabel icon="i-globe">CUSTOMERS</SectionLabel>
+      <h2 class="reveal">世界の規制業界が、<br />CARAを<span class="u">選んでいます</span></h2>
+      <p class="lead reveal">
+        グローバル製薬企業から世界トップクラスの自動車メーカーまで。CARAは40か国以上・75万ユーザーに利用されています。
+      </p>
+      {/* ロゴマーキーは統計帯直下の「導入実績」ブロック(.trusted)へ移動 */}
+      <div class="case-grid">
+        <div class="case-card reveal">
+          <span class="tag ph"><svg class="ico"><use href="#i-pill" /></svg>CASE 01 — PHARMA</span>
+          {/* 実名(Bayer)の掲載可否は本社確認前 */}
+          <h3>Bayer — グローバル規制文書基盤の刷新</h3>
+          <div class="big">約1,000,000件 <small>REGULATORY DOCS</small></div>
+          <p>
+            約100万件の規制文書を対象に、Documentumからクラウド基盤のCARAへグローバル移行。レガシー刷新の代表事例。
+          </p>
+        </div>
+        <div class="case-card reveal">
+          <span class="tag au"><svg class="ico"><use href="#i-factory" /></svg>CASE 02 — AUTOMOTIVE</span>
+          <h3>世界トップ3自動車メーカー</h3>
+          <div class="big">400,000 <small>USERS</small></div>
+          <p>Documentumから移行し、40万ユーザー規模で文書・データ・プロセス管理を刷新。</p>
+        </div>
+      </div>
+      {/*
+        画面上の「実名掲載は本社確認のうえ確定」という注記は文言変更により削除したが、
+        Bayer をはじめ実名・実ロゴの掲載可否は依然として本社確認前で未確定。
+        確認が取れるまでは公開前に差し替えるか非表示にすること。
+      */}
+      <p class="case-note reveal">事例の詳細を知りたい場合は、お問い合わせください。</p>
+    </div>
+  </section>
+
+  {/* CTAバナー */}
+  <section class="cta-banner">
+    <div class="wrap">
+      <div class="inner reveal">
+        <div class="copy">
+          <h3>貴社の規制業務、CARAならどう変わるか。<br />資料でご確認ください。</h3>
+          <p>業界別(自動車/化学/製薬)の参考資料もご用意しています。</p>
+        </div>
+        <div class="btns">
+          <a class="btn btn-white btn-lg" href="#contact">
+            <svg class="ico"><use href="#i-dl" /></svg>資料ダウンロード
+          </a>
+          <a class="btn btn-outline-w" href="#contact">相談してみる</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ⑦ FAQ */}
+  <section class="faq" id="faq">
+    <div class="wrap">
+      <SectionLabel icon="i-search">FAQ</SectionLabel>
+      <h2 class="reveal">よくあるご質問</h2>
+      {
+        faqs.map((f, i) => (
+          <details class="reveal">
+            <summary>
+              <span class="q">Q{i + 1}</span>
+              {f.q}
+            </summary>
+            <p class="a">{f.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+
+  {/* ⑧ クロージング */}
+  <section class="closing" id="contact">
+    <div class="wrap">
+      <SectionLabel icon="i-doc">CONTACT</SectionLabel>
+      <h2 class="reveal">AIの活用と規制対応を、<br /><span class="u">両立させませんか</span>。</h2>
+      <p class="sub reveal">
+        「自社のどの業務に効くのか」「既存システムとどう共存させるか」——まずは資料またはデモで、CARAが貴社にもたらす変化をご確認ください。
+      </p>
+      {/* HubSpotのportalId/formIdが未設定のあいだはモックのプレースホルダーを表示 */}
+      <HubspotForm class="reveal" formId={HUBSPOT.formIds.contact} />
+      {/* 問い合わせはフォーム1本に集約する方針のため、補助リンク(.sub-link)は置かない */}
+      <a class="btn btn-coral btn-lg reveal" href="#">
+        <svg class="ico"><use href="#i-dl" /></svg>フォームを送信する
+      </a>
+    </div>
+  </section>
+
+  {/* ⑨ ウェビナー・リソース */}
+  <section id="webinar">
+    <div class="wrap">
+      <SectionLabel icon="i-cal">WEBINAR & RESOURCES</SectionLabel>
+      <h2 class="reveal">まだ情報収集の段階の方へ</h2>
+      <p class="lead reveal">お問い合わせの前に、まずはウェビナーや資料でCARAを知りたい方はこちらから。</p>
+      <div class="webinar-box reveal">
+        <div>
+          <h3><svg class="ico ico-lg"><use href="#i-play" /></svg>無料ウェビナーで"体感"する</h3>
+          <p>
+            CARAの基本機能と実演デモを1時間で体感いただけるオンラインウェビナーを定期開催しています。質疑応答では「自社の場合どこから始めるべきか」まで、状況に合わせて具体的にお答えします。
+          </p>
+          <div class="tokuten">
+            <b>参加特典:</b> ご希望の方には終了後に無料デモ(個別相談付き)をご案内。業界別の参考資料(自動車/化学/製薬)もお送りします。
+          </div>
+        </div>
+        {/* TODO: webinars コレクション実装後、upcoming 2件 + アーカイブ導線を自動生成に差し替える */}
+        <div class="event-mock">
+          <div class="em-label">UPCOMING</div>
+          <div class="event-item">
+            <svg class="ico"><use href="#i-cal" /></svg>
+            <span><span class="date">2026/09/XX (火) 15:00–16:00</span>【製造業×AI】薬事・品質・監査のAI活用とは</span>
+          </div>
+          <div class="event-item">
+            <svg class="ico"><use href="#i-cal" /></svg>
+            <span><span class="date">2026/10/XX (木) 15:00–16:00</span>実演60分 — CARA AIデモンストレーション</span>
+          </div>
+          <div class="event-item">
+            <svg class="ico"><use href="#i-play" /></svg>
+            <span><span class="date">ARCHIVE</span>過去回のアーカイブ動画を見る →</span>
+          </div>
+        </div>
+      </div>
+      {/* TODO: blog / whitepapers コレクション実装後、最新記事・資料の自動表示に差し替える */}
+      <div class="case-grid resource-grid reveal">
+        <div class="case-card">
+          <span class="tag au"><svg class="ico"><use href="#i-doc" /></svg>BLOG</span>
+          <h3>専門ブログ・解説記事</h3>
+          <p>規制対応・品質管理・AI活用の最新トピックを解説。(最新3件をここに自動表示)</p>
+        </div>
+        <div class="case-card">
+          <span class="tag ph"><svg class="ico"><use href="#i-dl" /></svg>WHITEPAPER — GATED</span>
+          <h3>ホワイトペーパー</h3>
+          <p>「分断されたシステムの隠れたコスト」など、本社発の調査資料を日本語でダウンロード。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

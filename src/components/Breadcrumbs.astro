@@ -1,0 +1,33 @@
+---
+/**
+ * Breadcrumbs.astro — パンくず。
+ * mocks/CARA_webinar_design_mock.html / _detail_mock.html の .crumbs を移植。
+ * 最後の項目は href を持たせず現在地として表示する。
+ */
+
+interface Props {
+  items: { label: string; href?: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="crumbs">
+  <div class="wrap">
+    {
+      items.map((item, i) => (
+        <Fragment>
+          {i > 0 && ' / '}
+          {item.href ? <a href={item.href}>{item.label}</a> : <b>{item.label}</b>}
+        </Fragment>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .crumbs{background:var(--tint);padding:13px 0;font-size:12.5px;color:var(--ink-soft)}
+  .crumbs a{color:var(--ink-soft)}
+  .crumbs a:hover{color:var(--blue)}
+  .crumbs b{color:var(--blue)}
+</style>

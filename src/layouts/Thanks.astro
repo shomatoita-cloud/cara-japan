@@ -1,0 +1,51 @@
+---
+/**
+ * Thanks.astro — サンクスページ共通レイアウト。
+ * フォーム送信後の着地点。HubSpot側のリダイレクト設定でここへ飛ばす。
+ *
+ * 検索結果に出したくないため noindex は常に有効。
+ * モバイル固定CTAは、送信済みの人に再度CTAを出しても意味がないので非表示にする。
+ */
+import Base from './Base.astro';
+import '../styles/whitepaper.css';
+
+interface Props {
+  title: string;
+  /** ヒーローの見出し */
+  heading: string;
+  /** ヒーローの本文 */
+  lead: string;
+}
+
+const { title, heading, lead } = Astro.props;
+---
+
+<Base title={title} description={lead} bodyClass="thanks" noindex={true} stickyCta={null}>
+  <section class="thanks-hero">
+    <div class="wrap inner">
+      <div class="thanks-mark"><svg class="ico"><use href="#i-check" /></svg></div>
+      <h1>{heading}</h1>
+      <p>{lead}</p>
+    </div>
+  </section>
+
+  <section class="thanks-body">
+    <div class="wrap">
+      <slot />
+
+      {/* 回遊リンク(全サンクスページ共通) */}
+      <div class="next-links">
+        <a class="next-link" href="/webinars">
+          <span class="n-tag">WEBINAR</span>
+          <span class="n-title">無料ウェビナーに参加する</span>
+          <span class="n-desc">CARAの基本機能と実演デモを1時間で体感いただけます。</span>
+        </a>
+        <a class="next-link" href="/">
+          <span class="n-tag">TOP</span>
+          <span class="n-title">CARAについてもっと知る</span>
+          <span class="n-desc">選ばれる理由・実演イメージ・導入事例をご覧いただけます。</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>

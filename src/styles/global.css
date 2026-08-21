@@ -1,0 +1,41 @@
+/* ============================================================
+   global.css — 全ページ共通のパーツCSS
+   mocks/CARA_TOP_design_mock.html の <style> からそのまま移植。
+   セクション固有のCSSは各ページのスタイル(例 top.css)に置く。
+   ============================================================ */
+
+section{padding:100px 0;position:relative}
+/* ヘッダー(68px)は sticky なので、アンカー移動時に見出しが隠れないよう逃がす */
+section[id]{scroll-margin-top:76px}
+
+/* ---- セクションラベル(白ピル/SectionLabel.astro) ---- */
+.trail{
+  display:inline-flex;align-items:center;gap:8px;margin-bottom:18px;
+  font-size:13px;font-weight:900;letter-spacing:.1em;color:var(--blue);
+  background:#fff;border:1.5px solid var(--sky);border-radius:999px;padding:8px 20px;
+  box-shadow:0 3px 10px rgba(31,51,80,.07);
+}
+.trail .ico{width:14px;height:14px}
+
+/* ---- 見出し ---- */
+h2{font-weight:900;font-size:clamp(27px,3.8vw,40px);line-height:1.5;margin-bottom:20px;letter-spacing:.01em}
+h2 .u{background:linear-gradient(transparent 70%,rgba(31,164,142,.28) 70%)}
+.lead{max-width:680px;color:var(--ink-soft)}
+.center{text-align:center}
+.center .lead{margin:0 auto}
+
+/* ---- ボタン ---- */
+.btn{
+  display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:15px;
+  padding:16px 32px;border-radius:999px;letter-spacing:.03em;
+  transition:transform .18s,box-shadow .18s;
+}
+.btn .ico{width:17px;height:17px}
+.btn:hover{transform:translateY(-3px)}
+.btn-primary{background:var(--blue);color:#fff;box-shadow:0 8px 22px rgba(46,107,214,.3)}
+.btn-primary:hover{box-shadow:0 12px 28px rgba(46,107,214,.38)}
+.btn-coral{background:var(--coral);color:#fff;box-shadow:0 8px 22px rgba(240,101,63,.32)}
+.btn-ghost{border:2px solid var(--blue);color:var(--blue);background:#fff}
+.btn-lg{padding:19px 40px;font-size:16.5px}
+.btn-white{background:#fff;color:var(--blue);box-shadow:0 8px 22px rgba(0,0,0,.15)}
+.btn-outline-w{border:2px solid rgba(255,255,255,.8);color:#fff}
