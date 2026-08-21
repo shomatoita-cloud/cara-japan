@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# フォーム送信後の着地点。各ページに noindex を出しているためクロール不要
+Disallow: /thanks/
+
+Sitemap: https://generis-japan.com/sitemap-index.xml
