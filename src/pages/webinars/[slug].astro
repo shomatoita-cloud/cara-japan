@@ -2,7 +2,7 @@
 /**
  * ウェビナー詳細 — mocks/CARA_webinar_detail_mock.html を正として移植。
  * src/content/webinars/*.mdx から自動生成される(MDXを足すだけでページが増える)。
- * スラッグ = MDXのファイル名(例 20260929-manufacturing-ai)。
+ * スラッグ = MDXのファイル名(例 20261007-quality-regulatory-dx)。
  *
  * ※ 残席数の表示は実装しない(CLAUDE.md 決定事項)。
  *    モックCSSの .cap / .cap-bar(残席メーター)は webinar.css に移植していない。
@@ -13,7 +13,7 @@ import Base from '../../layouts/Base.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import HubspotForm from '../../components/HubspotForm.astro';
 import { WEBINAR, STATS } from '../../consts';
-import { formatDate, isPast, googleCalendarUrl } from '../../lib/webinars';
+import { formatDate, formatLabel, isPast, googleCalendarUrl } from '../../lib/webinars';
 import '../../styles/webinar.css';
 
 export const getStaticPaths = (async () => {
@@ -129,7 +129,7 @@ const stats = STATS.slice(0, 2);
         <table class="spec">
           <tbody>
             <tr><th>開催日時</th><td>{date.full} {d.timeLabel}</td></tr>
-            <tr><th>形式</th><td>{d.format} ※申込者には開催前日までに視聴URLをご案内</td></tr>
+            <tr><th>形式</th><td>{d.format}</td></tr>
             <tr><th>定員</th><td>{d.capacity}</td></tr>
             <tr><th>参加費</th><td>{WEBINAR.fee}</td></tr>
             <tr><th>主催</th><td>{WEBINAR.organizer}</td></tr>
@@ -239,7 +239,7 @@ const stats = STATS.slice(0, 2);
         </div>
         <div class="apply-row">
           <svg class="ico"><use href="#i-monitor" /></svg>
-          <div><b>{d.format}</b><small>前日までに視聴URLをご案内</small></div>
+          <div><b>{formatLabel(d.format)}</b><small>前日までに視聴URLをご案内</small></div>
         </div>
         <div class="apply-row">
           <svg class="ico"><use href="#i-users" /></svg>

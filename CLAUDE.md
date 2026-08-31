@@ -121,7 +121,7 @@ webinars: {
   date: string            // '2026-09-30'
   timeLabel: string       // '15:00–16:00'
   status: 'upcoming' | 'archive'
-  format: string          // 'オンライン(Zoom)'
+  format: string          // 'オンライン ※…'(※以降は注記。開催概要は全文、サイドカードは※手前のみ表示)
   capacity: string        // '定員20名・先着順' ※残席数の表示機能は作らない
   tags: string[]
   description: string
