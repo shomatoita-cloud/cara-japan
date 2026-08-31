@@ -19,7 +19,7 @@ const webinars = defineCollection({
     /** 例: '15:00–16:00'(区切りは en dash) */
     timeLabel: z.string(),
     status: z.enum(['upcoming', 'archive']),
-    /** 例: 'オンライン ※申込者には開催前日までに視聴URLをご案内'(注記は ※ 以降に書く) */
+    /** 例: 'オンライン ※視聴URLはお申し込み完了メールでご案内します'(注記は ※ 以降に書く) */
     format: z.string(),
     /** 例: '定員20名・先着順' ※残席数の表示機能は作らない(CLAUDE.md 決定事項) */
     capacity: z.string(),

@@ -214,7 +214,7 @@ const stats = STATS.slice(0, 2);
               </div>
             </Fragment>
           ) : (
-            <p>下記フォームよりお申し込みください。折り返し、視聴URLをご案内します。</p>
+            <p>下記フォームよりお申し込みください。視聴URLはお申し込み完了メールでご案内します。</p>
           )
         }
         {/* hubspotFormId はMDXのfrontmatterから。未設定のあいだはプレースホルダー表示 */}
@@ -239,7 +239,7 @@ const stats = STATS.slice(0, 2);
         </div>
         <div class="apply-row">
           <svg class="ico"><use href="#i-monitor" /></svg>
-          <div><b>{formatLabel(d.format)}</b><small>前日までに視聴URLをご案内</small></div>
+          <div><b>{formatLabel(d.format)}</b><small>視聴URLはお申し込み完了メールでご案内します</small></div>
         </div>
         <div class="apply-row">
           <svg class="ico"><use href="#i-users" /></svg>

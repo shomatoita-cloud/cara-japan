@@ -305,6 +305,9 @@
 .about-mini .btn{background:#fff;color:var(--blue)}
 
 /* 申込フォーム */
+/* 各CTAが #apply-form へ飛ぶ。div のため global.css の section[id] 指定が効かず、
+   固定ヘッダー(68px)に見出しが隠れるのでここで逃がす */
+.apply-form-block{scroll-margin-top:76px}
 .apply-form-block .form-mock,
 .apply-form-block .hs-form{margin-bottom:0;box-shadow:none;border-radius:14px}
 

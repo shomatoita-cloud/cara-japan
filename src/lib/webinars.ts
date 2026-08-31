@@ -84,7 +84,7 @@ export function parseTimeRange(timeLabel: string) {
 
 /**
  * format から注記(※以降)を除いた開催形式だけを返す。
- * 例: 'オンライン ※申込者には開催前日までに視聴URLをご案内' → 'オンライン'
+ * 例: 'オンライン ※視聴URLはお申し込み完了メールでご案内します' → 'オンライン'
  * 開催概要テーブルは注記込みで出すが、サイドカード・カレンダーの場所は形式だけを使う。
  */
 export function formatLabel(format: string) {
