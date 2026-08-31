@@ -249,6 +249,7 @@
    他セクション(.pain-list 38px 等)に合わせた見出し下の間隔をここで確保する。 */
 .cases .case-grid{margin-top:38px}
 .case-card{
+  display:block;color:var(--ink);
   border:1px solid var(--line);border-radius:18px;padding:32px 32px 28px;background:#fff;
   box-shadow:0 8px 24px rgba(31,51,80,.06);transition:transform .2s,box-shadow .2s;
 }
@@ -320,11 +321,15 @@
 .closing .btn{position:relative;z-index:2}
 
 /* ---- ⑨ リソース ---- */
+/* ボックス全体が /webinars へのリンク(要素は <a>)。ホバー挙動は .case-card に揃える */
 .webinar-box{
   background:#fff;border:1px solid var(--line);border-radius:22px;padding:46px 48px;
   display:grid;grid-template-columns:1.2fr .8fr;gap:46px;align-items:center;
   box-shadow:0 18px 46px rgba(31,51,80,.07);margin-top:38px;
+  color:var(--ink);transition:transform .2s,box-shadow .2s;
 }
+.webinar-box:hover{transform:translateY(-4px);box-shadow:0 26px 58px rgba(31,51,80,.13)}
+.webinar-box:hover h3{color:var(--blue)}
 @media(max-width:880px){.webinar-box{grid-template-columns:1fr;padding:32px 26px}}
 .webinar-box h3{font-size:23px;font-weight:900;margin-bottom:14px;line-height:1.6;display:flex;align-items:center;gap:12px}
 .webinar-box h3 .ico{color:var(--coral)}
@@ -336,4 +341,6 @@
 .event-item{border-bottom:1px solid var(--line);padding:13px 0;font-size:13.5px;display:flex;gap:11px;align-items:flex-start}
 .event-item .ico{width:16px;height:16px;color:var(--blue);margin-top:5px}
 .event-item .date{font-family:var(--mono);font-size:11.5px;color:var(--blue);display:block}
+/* リソースカード(BLOG / WHITEPAPER)もカード全体がリンク */
 .resource-grid{margin-top:22px}
+.resource-grid .case-card:hover h3{color:var(--blue)}

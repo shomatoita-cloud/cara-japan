@@ -86,4 +86,23 @@ const whitepapers = defineCollection({
   }),
 });
 
-export const collections = { webinars, whitepapers };
+/**
+ * ブログ記事(1件 = 1 MDX)
+ * ファイル名がそのまま URL のスラッグになる(例: ai-audit.mdx → /blog/ai-audit/)。
+ * 一覧・詳細はこのコレクションから自動生成されるため、MDXを追加するだけで反映される。
+ */
+const blog = defineCollection({
+  loader: glob({ pattern: '**/*.mdx', base: './src/content/blog' }),
+  schema: z.object({
+    title: z.string(),
+    /** 公開日 'YYYY-MM-DD' */
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "date は 'YYYY-MM-DD' 形式で指定してください"),
+    /** 一覧の抜粋兼 meta description */
+    description: z.string(),
+    tags: z.array(z.string()),
+    /** アイキャッチ画像のパス(public/images/ 配下)。未指定ならグラデ背景で代替する */
+    cover: z.string().optional(),
+  }),
+});
+
+export const collections = { webinars, whitepapers, blog };

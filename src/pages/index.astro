@@ -405,7 +405,7 @@ const faqs = [
       <SectionLabel icon="i-cal">WEBINAR & RESOURCES</SectionLabel>
       <h2 class="reveal">まだ情報収集の段階の方へ</h2>
       <p class="lead reveal">お問い合わせの前に、まずはウェビナーや資料でCARAを知りたい方はこちらから。</p>
-      <div class="webinar-box reveal">
+      <a class="webinar-box reveal" href="/webinars">
         <div>
           <h3><svg class="ico ico-lg"><use href="#i-play" /></svg>無料ウェビナーで"体感"する</h3>
           <p>
@@ -431,19 +431,19 @@ const faqs = [
             <span><span class="date">ARCHIVE</span>過去回のアーカイブ動画を見る →</span>
           </div>
         </div>
-      </div>
-      {/* TODO: blog / whitepapers コレクション実装後、最新記事・資料の自動表示に差し替える */}
+      </a>
+      {/* カード全体が一覧ページへのリンク。TODO: 最新記事・資料のカード自動生成に差し替える */}
       <div class="case-grid resource-grid reveal">
-        <div class="case-card">
+        <a class="case-card" href="/blog">
           <span class="tag au"><svg class="ico"><use href="#i-doc" /></svg>BLOG</span>
           <h3>専門ブログ・解説記事</h3>
           <p>規制対応・品質管理・AI活用の最新トピックを解説。(最新3件をここに自動表示)</p>
-        </div>
-        <div class="case-card">
+        </a>
+        <a class="case-card" href="/whitepapers">
           <span class="tag ph"><svg class="ico"><use href="#i-dl" /></svg>WHITEPAPER — GATED</span>
           <h3>ホワイトペーパー</h3>
           <p>「分断されたシステムの隠れたコスト」など、本社発の調査資料を日本語でダウンロード。</p>
-        </div>
+        </a>
       </div>
     </div>
   </section>

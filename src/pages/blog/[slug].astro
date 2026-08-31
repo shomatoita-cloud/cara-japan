@@ -1,0 +1,86 @@
+---
+/**
+ * ブログ記事詳細(雛形)— src/content/blog/*.mdx から自動生成される。
+ * スラッグ = MDXのファイル名(例 ai-audit-trail.mdx → /blog/ai-audit-trail/)。
+ *
+ * 記事0件のあいだはこのページは1本も生成されない(getStaticPaths が空配列を返す。
+ *  ビルドログのコレクション空警告は想定どおりで、MDXを1本置けば消える)。
+ * デザインはウェビナー詳細に準拠。本文の見出し・リスト等は blog.css の .article 配下で整えている。
+ */
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { formatDate } from '../../lib/webinars';
+import '../../styles/blog.css';
+
+export const getStaticPaths = (async () => {
+  const all = await getCollection('blog');
+  return all.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}) satisfies GetStaticPaths;
+
+const { post } = Astro.props;
+const d = post.data;
+const date = formatDate(d.date);
+const { Content } = await render(post);
+---
+
+<Base
+  title={`${d.title} | ブログ | CARA Platform 日本版`}
+  description={d.description}
+  ogImage={d.cover}
+  bodyClass="blog-detail"
+  navCurrent="/blog"
+  stickyCta={{ href: '/#contact', label: '資料を無料ダウンロード', icon: 'i-dl' }}
+>
+  <Breadcrumbs
+    items={[
+      { label: 'TOP', href: '/' },
+      { label: 'ブログ・解説記事', href: '/blog' },
+      { label: d.title },
+    ]}
+  />
+
+  {/* 記事ヒーロー */}
+  <section class="post-hero">
+    <div class="wrap inner">
+      <div class="date">{date.slash}</div>
+      <h1>{d.title}</h1>
+      <p>{d.description}</p>
+      {
+        d.tags.length > 0 && (
+          <div class="tag-row">
+            {d.tags.map((t) => <span># {t}</span>)}
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  {/* 本文(MDX) */}
+  <div class="wrap">
+    <article class="article reveal">
+      <Content />
+    </article>
+  </div>
+
+  <div class="wrap post-foot">
+    <a class="back-link" href="/blog">
+      <svg class="ico"><use href="#i-list" /></svg>記事一覧に戻る
+    </a>
+  </div>
+
+  {/* 記事下CTA */}
+  <section class="bottom-cta">
+    <div class="wrap">
+      <h2 class="reveal">CARAが自社にもたらす変化を、<br />資料またはデモでご確認ください。</h2>
+      <p class="reveal">製品資料のダウンロード、個別デモのご依頼はこちらから。</p>
+      <div class="btns reveal">
+        <a class="btn btn-white btn-lg" href="/#contact">
+          <svg class="ico"><use href="#i-dl" /></svg>製品資料を無料ダウンロード
+        </a>
+        <a class="btn btn-coral btn-lg" href="/webinars">無料ウェビナーを見る</a>
+      </div>
+    </div>
+  </section>
+</Base>

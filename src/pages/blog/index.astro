@@ -1,0 +1,96 @@
+---
+/**
+ * ブログ一覧 — デザインはウェビナー一覧(mocks/CARA_webinar_design_mock.html)に準拠。
+ * 表示内容は src/content/blog/*.mdx から自動生成される(MDXを足すだけで反映)。
+ *
+ * 記事0件のあいだは空状態(.empty-note)を出す。
+ * (このときビルドログに Astro の「The collection "blog" ... is empty」警告が出るが、
+ *  MDXを1本置けば消える。ビルド自体は成功する)
+ * 日付整形は lib/webinars.ts の formatDate をそのまま使う('YYYY-MM-DD' 前提で共通)。
+ */
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import SectionLabel from '../../components/SectionLabel.astro';
+import { formatDate } from '../../lib/webinars';
+import '../../styles/blog.css';
+
+// 公開日の降順(新しい記事が先頭)。MDXの読み込み順に依存させない
+const posts = (await getCollection('blog')).sort((a, b) => b.data.date.localeCompare(a.data.date));
+
+// cover 未指定のカードはグラデ3種を順番に使い回す(ウェビナーのアーカイブサムネと同じ扱い)
+const THUMBS = ['', 't2', 't3'];
+---
+
+<Base
+  title="ブログ・解説記事 | CARA Platform 日本版"
+  description="規制対応・品質管理・監査対応・AI活用の最新トピックを、製造業の現場目線で解説します。"
+  bodyClass="blog-list"
+  navCurrent="/blog"
+  stickyCta={{ href: '/#contact', label: '資料を無料ダウンロード', icon: 'i-dl' }}
+>
+  <Breadcrumbs items={[{ label: 'TOP', href: '/' }, { label: 'ブログ・解説記事' }]} />
+
+  {/* ページヘッダー */}
+  <section class="page-hero">
+    <div class="wrap inner">
+      <SectionLabel icon="i-doc" reveal={false}>BLOG &amp; INSIGHTS</SectionLabel>
+      <h1>ブログ・解説記事</h1>
+      <p>規制対応・品質管理・監査対応・AI活用の最新トピックを、製造業の現場目線で解説します。</p>
+    </div>
+  </section>
+
+  {/* 記事一覧 */}
+  <section class="posts">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <h2>記事一覧</h2>
+        <span class="count">ALL <b>{posts.length}</b> POSTS</span>
+      </div>
+
+      {
+        posts.length === 0 ? (
+          <div class="empty-note reveal">記事は準備中です。公開まで少しお待ちください。</div>
+        ) : (
+          <div class="post-grid">
+            {posts.map((post, i) => (
+              <a class="post-card reveal" href={`/blog/${post.id}/`}>
+                <div class:list={['post-thumb', post.data.cover ? null : THUMBS[i % THUMBS.length]]}>
+                  {post.data.cover ? (
+                    <img src={post.data.cover} alt="" loading="lazy" />
+                  ) : (
+                    <svg class="ico"><use href="#i-doc" /></svg>
+                  )}
+                </div>
+                <div class="post-body">
+                  <div class="date">{formatDate(post.data.date).slash}</div>
+                  <h3>{post.data.title}</h3>
+                  <p>{post.data.description}</p>
+                  {post.data.tags.length > 0 && (
+                    <div class="post-tags">
+                      {post.data.tags.map((t) => <span># {t}</span>)}
+                    </div>
+                  )}
+                </div>
+              </a>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  {/* クロージング */}
+  <section class="closing">
+    <div class="wrap">
+      <h2 class="reveal">記事を読むより、<br />実物を見るほうが早い方へ</h2>
+      <p class="reveal">製品資料のダウンロード、個別デモのご依頼はこちらから。</p>
+      <div class="btns reveal">
+        <a class="btn btn-white btn-lg" href="/#contact">
+          <svg class="ico"><use href="#i-dl" /></svg>製品資料を無料ダウンロード
+        </a>
+        <a class="btn btn-coral btn-lg" href="/webinars">無料ウェビナーを見る</a>
+      </div>
+    </div>
+  </section>
+</Base>
