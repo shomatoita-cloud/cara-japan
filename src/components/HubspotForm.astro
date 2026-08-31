@@ -3,11 +3,15 @@
  * HubspotForm.astro — HubSpotフォームの唯一の埋め込み口。
  * 自前のフォーム(<form>/送信処理)は実装しない。
  *
- * portalId / formId が未設定のあいだは、モック(.form-mock)の
- * プレースホルダーを表示する。設定されると埋め込みに切り替わる。
+ * 埋め込みは HubSpot の新形式:
+ *   <script src="https://js-{region}.hsforms.net/forms/embed/{portalId}.js" defer></script>
+ *   <div class="hs-form-frame" data-region data-form-id data-portal-id></div>
+ * スクリプトはページ内のフォーム数によらず1回だけ読み込む(下の重複ガードを参照)。
+ *
+ * portalId / formId が未設定のあいだは、モック(.form-mock)のプレースホルダーを表示する。
  * 送信後の遷移先(/thanks/[slug])は HubSpot 側の設定で行う。
  */
-import { HUBSPOT } from '../consts';
+import { HUBSPOT, isHubspotConfigured } from '../consts';
 
 interface Props {
   portalId?: string;
@@ -31,32 +35,31 @@ const {
   class: className,
 } = Astro.props;
 
-const isConfigured = Boolean(portalId && formId);
-const targetId = `hs-form-${formId || 'placeholder'}`;
+const isConfigured = isHubspotConfigured(formId, portalId);
 
-// HubSpot埋め込みのローダー。portalId/formId 設定後にのみ出力される。
-const embedScript = `(function(){
+// region 未指定のアカウントは region なしのホスト(js.hsforms.net)になる
+const embedSrc = region
+  ? `https://js-${region}.hsforms.net/forms/embed/${portalId}.js`
+  : `https://js.hsforms.net/forms/embed/${portalId}.js`;
+
+// ローダー。同一ページに複数フォームがあっても src が同じなら1回しか読み込まない。
+// (HubSpotのスクリプトはページ内の .hs-form-frame をまとめて処理するため、1本で足りる)
+const loaderScript = `(function(){
+  var src = ${JSON.stringify(embedSrc)};
+  if (document.querySelector('script[src="' + src + '"]')) return;
   var s = document.createElement('script');
-  s.src = 'https://js.hsforms.net/forms/embed/v2.js';
-  s.async = true;
-  s.onload = function(){
-    window.hbspt.forms.create({
-      portalId: ${JSON.stringify(portalId)},
-      formId: ${JSON.stringify(formId)},
-      region: ${JSON.stringify(region)} || undefined,
-      target: '#${targetId}'
-    });
-  };
+  s.src = src;
+  s.defer = true;
   document.head.appendChild(s);
 })();`;
 ---
 
 {
   isConfigured ? (
-    <Fragment>
-      <div class:list={['hs-form', className]} id={targetId} />
-      <script is:inline set:html={embedScript} />
-    </Fragment>
+    <div class:list={['hs-form', className]}>
+      <div class="hs-form-frame" data-region={region} data-form-id={formId} data-portal-id={portalId} />
+      <script is:inline set:html={loaderScript} />
+    </div>
   ) : (
     /* 未設定時: モックの .form-mock をそのまま表示(入力はできない) */
     <div class:list={['form-mock', className]} aria-hidden="true">
@@ -71,13 +74,18 @@ const embedScript = `(function(){
 }
 
 <style>
-  .form-mock{
+  /* プレースホルダーと実フォームで白カードの寸法を揃える。
+     下層ページ側の上書き(.dl-card / .apply-form-block)は両方を対象にしているため、
+     ここを共通にしておけば実フォームに切り替わってもレイアウトが変わらない。 */
+  .form-mock,
+  .hs-form{
     max-width:540px;margin:0 auto 36px;background:#fff;border:1px solid var(--line);
     border-radius:20px;padding:34px;text-align:left;box-shadow:0 30px 66px rgba(15,40,90,.3);
     position:relative;z-index:2;
   }
+  /* HubSpotが差し込むフォームはカード幅いっぱいに広げる */
+  .hs-form-frame{width:100%}
   .form-mock label{font-size:12.5px;font-weight:700;display:block;margin-bottom:6px;color:var(--ink)}
   .form-mock .field{background:var(--tint);border:1px solid var(--line);border-radius:10px;height:46px;margin-bottom:16px}
   .form-mock .field.ta{height:auto;padding:11px 14px;font-size:13px;color:var(--ink-soft)}
-  .hs-form{max-width:540px;margin:0 auto 36px;position:relative;z-index:2}
 </style>

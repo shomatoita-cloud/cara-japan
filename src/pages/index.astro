@@ -6,8 +6,11 @@
 import Base from '../layouts/Base.astro';
 import SectionLabel from '../components/SectionLabel.astro';
 import HubspotForm from '../components/HubspotForm.astro';
-import { SITE, STATS, CUSTOMER_LOGOS, HUBSPOT } from '../consts';
+import { SITE, STATS, CUSTOMER_LOGOS, HUBSPOT, isHubspotConfigured } from '../consts';
 import '../styles/top.css';
+
+// HubSpotの実フォームが出るときは、送信ボタンをフォーム側が持つため自前のCTAは出さない
+const contactFormLive = isHubspotConfigured(HUBSPOT.formIds.contact);
 
 const faqs = [
   {
@@ -393,9 +396,14 @@ const faqs = [
       {/* HubSpotのportalId/formIdが未設定のあいだはモックのプレースホルダーを表示 */}
       <HubspotForm class="reveal" formId={HUBSPOT.formIds.contact} />
       {/* 問い合わせはフォーム1本に集約する方針のため、補助リンク(.sub-link)は置かない */}
-      <a class="btn btn-coral btn-lg reveal" href="#">
-        <svg class="ico"><use href="#i-dl" /></svg>フォームを送信する
-      </a>
+      {/* プレースホルダー表示のときだけのダミーCTA。実フォームでは送信ボタンがフォーム内にある */}
+      {
+        !contactFormLive && (
+          <a class="btn btn-coral btn-lg reveal" href="#">
+            <svg class="ico"><use href="#i-dl" /></svg>フォームを送信する
+          </a>
+        )
+      }
     </div>
   </section>
 

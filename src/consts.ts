@@ -14,18 +14,28 @@ export const SITE = {
 
 /**
  * HubSpot 連携。
- * portalId / formId は未取得のため空。HubSpot側でフォーム作成後に設定する。
- * 空のあいだ HubspotForm.astro はプレースホルダーを表示する。
+ * 埋め込みは新形式(js-{region}.hsforms.net/forms/embed/{portalId}.js + .hs-form-frame)。
+ * formId が空のフォームは HubspotForm.astro がプレースホルダーを表示する。
  */
 export const HUBSPOT = {
-  portalId: '',
-  /** フォームのリージョン(例: 'na1' / 'eu1')。HubSpotアカウントに合わせて設定 */
-  region: '',
+  portalId: '9063793',
+  /** フォームのリージョン(例: 'na1' / 'na2' / 'eu1')。埋め込みスクリプトのURLに入る */
+  region: 'na2',
   formIds: {
     /** TOP: 資料ダウンロード / デモ / 個別相談 */
-    contact: '',
+    contact: '5cf5c5ce-1328-4096-88cf-3034b8a8ed58',
   },
 } as const;
+
+/**
+ * 実フォームを埋め込める状態か。portalId と formId の両方がそろって初めて true。
+ * false のあいだ HubspotForm.astro はプレースホルダーを表示するため、
+ * 呼び出し側で「プレースホルダー時だけ出す要素」の出し分けにも使う。
+ * ※ウェビナー/資料の formId は未取得のため、当面 false のまま。
+ */
+export function isHubspotConfigured(formId: string, portalId: string = HUBSPOT.portalId): boolean {
+  return Boolean(portalId && formId);
+}
 
 /**
  * ヒーロー下の統計帯。カウントアップの目標値。
