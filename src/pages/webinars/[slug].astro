@@ -34,11 +34,17 @@ const isOpen = d.status === 'upcoming' && !past;
 const calUrl = isOpen ? googleCalendarUrl(webinar, new URL(Astro.url.pathname, Astro.site)) : null;
 
 const stats = STATS.slice(0, 2);
+// 概要は空行区切りで段落に分ける(1段落=1<p>)。metaは先頭段落のみ使う。
+const descParagraphs = d.description
+  .trim()
+  .split(/\n\s*\n/)
+  .map((p) => p.replace(/\s+/g, ' ').trim())
+  .filter(Boolean);
 ---
 
 <Base
   title={`${d.title} | ウェビナー詳細 | CARA Platform 日本版`}
-  description={d.description}
+  description={descParagraphs[0]}
   bodyClass="webinar-detail"
   navCurrent="/webinars"
   stickyCta={{
@@ -82,7 +88,7 @@ const stats = STATS.slice(0, 2);
       {/* 概要 */}
       <div class="block reveal">
         <h2><span class="b-ico"><svg class="ico"><use href="#i-info" /></svg></span>概要</h2>
-        <p>{d.description}</p>
+        {descParagraphs.map((p) => <p>{p}</p>)}
         {/* MDX本文 = 概要の続き */}
         <Content />
       </div>
