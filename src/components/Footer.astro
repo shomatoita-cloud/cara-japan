@@ -12,7 +12,13 @@ import { SITE } from '../consts';
     <a class="foot-logo" href="/">
       <img src="/images/cara_logo_color.svg" alt="CARA Platform" width="107" height="22" />
     </a>
-    <span>{SITE.copyright}</span>
+    <div class="foot-meta">
+      {/* 本社(英語)のプライバシーポリシー。日本語版が用意されたら差し替える */}
+      <a class="foot-link" href="https://www.generiscorp.com/privacy-policy/" target="_blank" rel="noopener">
+        プライバシーポリシー
+      </a>
+      <span>{SITE.copyright}</span>
+    </div>
   </div>
 </footer>
 
@@ -23,4 +29,9 @@ import { SITE } from '../consts';
   .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
   .foot-logo{display:flex;align-items:center}
   .foot-logo img{height:22px;width:auto;display:block}
+  /* 狭い幅ではリンクと著作権表記が2行に折り返る。gap の縦横を分けて行間を詰めている */
+  .foot-meta{display:flex;align-items:center;flex-wrap:wrap;gap:6px 18px}
+  /* 和文はモノスペースにグリフがないため本文フォントに戻す */
+  .foot-link{font-family:var(--sans);font-size:12px;letter-spacing:.02em;color:var(--blue)}
+  .foot-link:hover{text-decoration:underline}
 </style>
